@@ -1,18 +1,19 @@
 {
   "date": "2026-04-13",
   "day": "Monday, April 13",
-  "generated_at": "2026-04-13T22:28:45.822202Z",
+  "generated_at": "2026-04-13T23:06:02.353564Z",
   "stories": {
     "environment": [
-      "Ocean Protection Reaches 10% Milestone",
-      "Giant Pandas Upgrade to Least Concern Status"
+      "Giant Pandas No Longer Endangered After Groundbreaking Conservation Success",
+      "Australia Hits Solar Storage Record As Household Batteries Surge"
     ],
     "science": [
-      "Hidden Brain Drain System Discovered"
+      "Fortescue Launches World's Largest Off-Grid Renewable Energy Network"
     ],
     "sports": [
-      "NBA Playoffs Begin Tomorrow"
+      "Brisbane Lions Dominate North Melbourne in Gather Round Thriller"
     ],
-    "overview": "Wind and Solar Power Europe's Green Revolution"
-  }
+    "overview": "Global Conservation Icons Giant Pandas Moved From Endangered To Vulnerable Status"
+  },
+  "has_audio": false
 }
