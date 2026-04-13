@@ -27,19 +27,23 @@ Meteorologist: Sam (charlie voice). Warm dry Australian humour throughout.
 """
 
 def claude(messages, system="", max_tokens=4096, use_search=False):
+    import time
     body = {"model": MODEL, "max_tokens": max_tokens, "messages": messages}
     if system: body["system"] = system
     if use_search: body["tools"] = [{"type": "web_search_20250305", "name": "web_search"}]
-    resp = requests.post("https://api.anthropic.com/v1/messages", headers=HEADERS, json=body, timeout=120)
-    resp.raise_for_status()
-    data = resp.json()
-    return "\n".join(b["text"] for b in data.get("content", []) if b.get("type") == "text").strip()
+    for attempt in range(3):
+        resp = requests.post("https://api.anthropic.com/v1/messages", headers=HEADERS, json=body, timeout=120)
+        if resp.status_code == 429:
+            wait = 30 * (attempt + 1)
+            print(f"  Rate limited — waiting {wait}s...")
+            time.sleep(wait)
+            continue
+        resp.raise_for_status()
+        data = resp.json()
+        time.sleep(3)
+        return "\n".join(b["text"] for b in data.get("content", []) if b.get("type") == "text").strip()
+    raise Exception("Rate limit exceeded after 3 retries")
 
-def clean_json(raw):
-    raw = raw.strip()
-    if raw.startswith("```"): raw = "\n".join(raw.split("\n")[1:])
-    if raw.endswith("```"): raw = "\n".join(raw.split("\n")[:-1])
-    return raw.strip()
 
 def fetch_news():
     print("\n[1/4] Fetching today's news...")
