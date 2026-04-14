@@ -1,0 +1,51 @@
+name: ParkSyde Daily Bulletin
+
+on:
+  schedule:
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install requests
+
+      - name: Set date
+        id: date
+        run: echo "date=$(TZ='Australia/Brisbane' date '+%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Generate bulletin
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
+          PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
+        run: python generate_bulletin.py
+
+      - name: Commit output
+        run: |
+          git config user.name "ParkSyde Bot"
+          git config user.email "bot@parksyde.com.au"
+          git add output/
+          git diff --staged --quiet || git commit -m "Bulletin ${{ steps.date.outputs.date }}"
+          git push
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bulletin-${{ steps.date.outputs.date }}
+          path: output/
+          retention-days: 30
