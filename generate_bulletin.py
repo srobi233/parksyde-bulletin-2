@@ -25,11 +25,6 @@ VOICES = {
     "alice":   "Xb7hH8MSUJpSbSDYk0k2",  # Alice — female
 }
 
-          env:
-        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-        PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
-        PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
 
     if system: body["system"] = system
     if use_search: body["tools"] = [{"type": "web_search_20250305", "name": "web_search"}]
