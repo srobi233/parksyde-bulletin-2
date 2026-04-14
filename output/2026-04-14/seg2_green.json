@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "[Australian accent] First up on the Green Desk, and <cite index=\"16-7,16-9\">France has officially banned products containing PFAS chemicals - those 'forever chemicals' that stick around in the environment. The law covers cosmetics, clothing, and ski wax where safer alternatives exist.</cite>"
+  },
+  {
+    "speaker": "charlie",
+    "text": "[Australian accent] And in the UK, <cite index=\"16-2,16-11,16-12\">wind and photovoltaic panels generated more electricity than fossil fuels in the European Union for the first time. In 2025, renewables produced 30% compared to fossil fuels at 29%.</cite> Finally catching up to Queensland's sunshine game, eh?"
+  },
+  {
+    "speaker": "alice",
+    "text": "[Australian accent] Back to you legends at the desk."
+  }
+]

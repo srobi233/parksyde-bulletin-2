@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "[Australian accent] Science and Tomorrow now, and researchers have done the impossible. <cite index=\"21-2,21-12\">Scientists have stabilized a highly reactive molecule in water, confirming a decades-old theory about vitamin B1's role in the body.</cite> Could revolutionize greener chemical processes."
+  },
+  {
+    "speaker": "alice",
+    "text": "[Australian accent] <cite index=\"21-24,21-25\">Researchers used AI to create a breakthrough stool test that detects 90% of colorectal cancers - no colonoscopy required. They mapped gut bacteria at unprecedented detail, revealing microbial patterns linked to cancer.</cite>"
+  },
+  {
+    "speaker": "charlie",
+    "text": "[Australian accent] And one for breakfast lovers - <cite index=\"25-1,25-9,25-10\">new AI research could slash energy use by 100 times while improving accuracy. By combining neural networks with human-like symbolic reasoning, robots can think more logically instead of brute-force trial and error.</cite> Even smarter than my coffee machine."
+  }
+]
