@@ -5,6 +5,9 @@ on:
     - cron: "0 20 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -36,7 +39,8 @@ jobs:
           git config user.name "ParkSyde Bot"
           git config user.email "bot@parksyde.com.au"
           git add output/
-          git diff --staged --quiet || (git commit -m "Bright Side ${{ steps.date.outputs.date }}" && git push)
+          git diff --staged --quiet || git commit -m "Bulletin ${{ steps.date.outputs.date }}"
+          git push
 
       - uses: actions/upload-artifact@v4
         if: always()
