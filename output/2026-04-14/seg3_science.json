@@ -1,14 +1,14 @@
 [
   {
     "speaker": "charlie",
-    "text": "[Australian accent] Science and Tomorrow time - and scientists have achieved something they called 'the unthinkable.' They've stabilised a highly reactive molecule in water, confirming a decades-old theory about vitamin B1's role in our bodies."
+    "text": "[Australian accent] Now Jamie, prepare to have your mind absolutely blown by this next story. Scientists have just achieved something that sounds like pure science fiction - <cite index='15-1'>they've developed a cutting-edge technique that uses RNA 'barcodes' to map how neurons connect, capturing thousands of links with single-synapse precision</cite>. We're talking about mapping the brain's hidden wiring in ways we've never been able to before!"
   },
   {
     "speaker": "alice",
-    "text": "[Australian accent] Researchers in the UK are wrapping up trials on a revolutionary blood test that can detect around 50 types of cancer before symptoms even appear. Over 140,000 people took part, and if the results hold up, this could change everything about early detection."
+    "text": "[Australian accent] Oh my goodness, Alex, that is incredible! And it's not the only breakthrough happening in the brain science world. <cite index='13-2'>Scientists have also made a breakthrough in understanding rare proton-rich elements in astrophysics</cite>, and there's been some fascinating work on <cite index='11-12'>stabilizing highly reactive molecules in water, which is confirming decades-old theories about vitamin B1's role in the body</cite>. The scientific community is just firing on all cylinders right now!"
   },
   {
     "speaker": "charlie",
-    "text": "[Australian accent] And quantum physicists at UC Santa Barbara have developed something called real-time Dyson expansion - basically a new way to understand how particles behave in driven quantum systems. Sounds fancy, but it's the kind of breakthrough that makes quantum computing actually work. Science nerds worldwide are probably having a cup of tea to celebrate."
+    "text": "[Australian accent] And here's something that could change cancer treatment forever - researchers have discovered that <cite index='35-4,35-5'>a protein called TDP43 controls a key DNA repair process, and when it becomes imbalanced, it can harm neurons and even increase mutation rates in cancer</cite>. <cite index='35-6'>This discovery places TDP43 at the center of both neurodegeneration and cancer biology</cite>. It's like finding a master key that unlocks understanding of multiple diseases at once!"
   }
 ]

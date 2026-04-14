@@ -1,19 +1,19 @@
 {
   "date": "2026-04-14",
   "day": "Tuesday, April 14",
-  "generated_at": "2026-04-14T11:50:04.038077Z",
+  "generated_at": "2026-04-14T21:15:06.693259",
   "stories": {
     "environment": [
-      "Finland harnesses sand power for industrial decarbonisation",
-      "Portugal reaches 80.7% renewable electricity record"
+      "Texas debuts groundbreaking air quality monitors in Houston's Fifth Ward",
+      "EV prices plummet as dealers offer major discounts amid high inventory"
     ],
     "science": [
-      "Scientists crack vitamin B1 mystery with water stabilisation breakthrough"
+      "Scientists map brain's hidden neural wiring using revolutionary RNA 'barcode' technique"
     ],
     "sports": [
-      "Denver Pioneers win third NCAA men's hockey title in five years"
+      "Australia's S&P/ASX 200 rises despite global market volatility"
     ],
-    "overview": "Researchers develop revolutionary blood test detecting 50 types of cancer before symptoms appear"
+    "overview": "Breakthrough RNA brain mapping reveals how neurons connect with precision"
   },
-  "has_audio": false
+  "has_audio": true
 }

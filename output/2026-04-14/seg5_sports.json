@@ -1,18 +1,14 @@
 [
   {
     "speaker": "charlie",
-    "text": "[Australian accent] Time for The Scoreboard with news that'll warm any sports fan's heart. The Denver Pioneers have won their third NCAA men's hockey title in just five years - talk about building a dynasty in the ice rinks of America."
+    "text": "[Australian accent] Thanks Sam! Now let's check in on how our markets are tracking, and despite all the global uncertainty, there's actually some good news to report. <cite index='25-9'>Australia's S&P/ASX 200 was up 0.53% today</cite>, showing that our market's holding its own pretty well despite the challenges elsewhere."
   },
   {
     "speaker": "alice",
-    "text": "[Australian accent] In the WNBA, history's being made - Azzi Fudd was drafted first overall by the Dallas Wings on Monday and she's set to become the highest-paid rookie to ever enter the league. The future of women's basketball is looking bright and profitable."
+    "text": "[Australian accent] That's really encouraging to hear, Alex! And you know what's fantastic? <cite index='26-9,26-10,26-11'>Community sport participation has rebounded strongly across the country, with over 11 million Australians now actively involved in organised sporting activities, thanks to successful local initiatives like 'Sport for All' that are increasing participation among diverse communities</cite>."
   },
   {
     "speaker": "charlie",
-    "text": "[Australian accent] And Barcelona are gearing up for their Champions League quarterfinal second leg against Atl\u00e9tico Madrid at the Metropolitano tonight. After training at the stadium yesterday, they're ready for what coach Hansi Flick called 'the big clash' - their sixth and final meeting with Atl\u00e9tico this season."
-  },
-  {
-    "speaker": "alice",
-    "text": "[Australian accent] From college ice hockey to professional basketball to European football - sport keeps showing us that excellence is about showing up when it matters most. That is why we love sport."
+    "text": "[Australian accent] Too right! And with <cite index='26-11'>the upcoming Brisbane 2032 Olympics already sparking increased investment in grassroots sports infrastructure throughout Queensland and beyond</cite>, there's never been a better time to get involved in sport. Whether you're a player, coach, or just a passionate supporter, sport continues to bring out the best in us Aussies!"
   }
 ]

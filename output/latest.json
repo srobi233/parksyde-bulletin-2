@@ -1,1 +1,19 @@
-{"latest_date": "2026-04-14"}
+{
+  "date": "2026-04-14",
+  "day": "Tuesday, April 14",
+  "generated_at": "2026-04-14T21:15:06.693259",
+  "stories": {
+    "environment": [
+      "Texas debuts groundbreaking air quality monitors in Houston's Fifth Ward",
+      "EV prices plummet as dealers offer major discounts amid high inventory"
+    ],
+    "science": [
+      "Scientists map brain's hidden neural wiring using revolutionary RNA 'barcode' technique"
+    ],
+    "sports": [
+      "Australia's S&P/ASX 200 rises despite global market volatility"
+    ],
+    "overview": "Breakthrough RNA brain mapping reveals how neurons connect with precision"
+  },
+  "has_audio": true
+}
