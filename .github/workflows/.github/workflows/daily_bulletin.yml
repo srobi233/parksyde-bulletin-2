@@ -4,7 +4,8 @@ on:
   schedule:
     - cron: "0 20 * * *"
   workflow_dispatch:
-
+permissions:
+  contents: write
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -25,7 +26,8 @@ jobs:
         run: echo "date=$(TZ='Australia/Brisbane' date '+%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Generate bulletin
-        env:
+        env:         ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
           PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
