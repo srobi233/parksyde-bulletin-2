@@ -29,7 +29,8 @@ jobs:
 
       - name: Generate bulletin
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}        ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+
           PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
           PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
         run: python generate_bulletin.py
