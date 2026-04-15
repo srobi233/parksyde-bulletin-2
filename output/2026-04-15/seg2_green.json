@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "[Australian accent] Right then, let's kick off with some absolutely bonkers environmental news! <cite index=\"20-3\">Australia's research vessel Investigator has helped scientists describe 179 species that are new to science in just 12 years</cite> - everything from deep-sea sharks to microscopic algae!"
+  },
+  {
+    "speaker": "charlie",
+    "text": "[Australian accent] Crikey, that's incredible! <cite index=\"20-6\">Dr Ben Arthur from CSIRO has been reflecting on some of the memorable new species discovered</cite>, and it just shows how much we still don't know about our own backyard. The ocean's full of surprises, mate!"
+  },
+  {
+    "speaker": "alice",
+    "text": "[Australian accent] And speaking of clever solutions, researchers at Durham University have been using cricket crowds to test new transport decarbonisation tools! <cite index=\"16-6\">The research was led by Durham's Engineering Department and will support developing a prototype passenger transport digital twin</cite> - how's that for thinking outside the box!"
+  }
+]
