@@ -36,7 +36,7 @@ jobs:
         run: python generate_bulletin.py
 
       - name: Commit output
-        run: git pull --rebase
+        run: git pull --rebase to run: 
           git config user.name "ParkSyde Bot"
           git config user.email "bot@parksyde.com.au"
           git add output/
