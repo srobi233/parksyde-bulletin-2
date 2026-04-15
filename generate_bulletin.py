@@ -57,9 +57,16 @@ def claude(prompt, system="", max_tokens=4000, use_search=False):
 
 def clean(raw):
     raw = raw.strip()
-    for fence in ["```json", "```"]:
-        if raw.startswith(fence): raw = raw[len(fence):]
-    if raw.endswith("```"): raw = raw[:-3]
+    if "```json" in raw:
+        raw = raw.split("```json", 1)[1]
+        if "```" in raw:
+            raw = raw.split("```", 1)[0]
+    elif "```" in raw:
+        raw = raw.split("```", 1)[1]
+        if "```" in raw:
+            raw = raw.split("```", 1)[0]
+    elif "{" in raw:
+        raw = raw[raw.index("{"):]
     return raw.strip()
 
 def generate_tts(text, speaker, filename):
@@ -73,7 +80,6 @@ def generate_tts(text, speaker, filename):
         "xi-api-key": ELEVENLABS_API_KEY,
         "Content-Type": "application/json"
     }
-    # Strip the accent tag for TTS
     clean_text = text.replace("[Australian accent]", "").replace("[Australian acce", "")
     body = {
         "text": clean_text,
@@ -96,7 +102,6 @@ def generate_segment_audio(seg_id, script):
     audio_dir = OUTPUT_DIR / "audio"
     audio_dir.mkdir(exist_ok=True)
     if isinstance(script, str):
-        # Weather segment — single speaker
         path = audio_dir / f"{seg_id}.mp3"
         generate_tts(script, "charlie", str(path))
     elif isinstance(script, list):
@@ -105,12 +110,11 @@ def generate_segment_audio(seg_id, script):
             text = line.get("text", "")
             path = audio_dir / f"{seg_id}_line{i}.mp3"
             generate_tts(text, speaker, str(path))
-            time.sleep(1)  # Avoid ElevenLabs rate limits
+            time.sleep(1)
 
 def main():
     print(f"ParkSyde Bright Side — {DATE_STR}")
 
-    # CALL 1: Fetch news and write all scripts
     print("[1/3] Fetching news and writing scripts...")
     news_raw = claude(
         prompt=f"""Today is {DAY_NAME}. Search for today's real news and write a complete ParkSyde Bright Side bulletin.
@@ -158,19 +162,17 @@ Return ONLY this JSON structure, no other text:
 }}
 
 Use today's REAL news. Make each speaker line 2-3 sentences.""",
-        system="You are the head writer for ParkSyde Bright Side, a daily good news bulletin.",
+        system="You are the head writer for ParkSyde Bright Side, a daily good news bulletin. Always return valid JSON only, no preamble.",
         max_tokens=4000,
         use_search=True
     )
 
-    # Parse
     try:
         data = json.loads(clean(news_raw))
     except Exception as e:
         print(f"JSON parse error: {e}\nRaw: {news_raw[:500]}")
         raise
 
-    # Write script files
     print("[2/3] Writing script files...")
     stories = data.get("stories", {})
     for key in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
@@ -188,14 +190,12 @@ Use today's REAL news. Make each speaker line 2-3 sentences.""",
     (OUTPUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2))
     Path("output/latest.json").write_text(json.dumps(manifest, indent=2))
 
-    # Generate TTS audio
     print("[3/3] Generating TTS audio...")
     for seg_id in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
         script = data.get(seg_id, [])
         generate_segment_audio(seg_id, script)
     generate_segment_audio("seg4_weather", data.get("seg4_weather", ""))
 
-    # Ping Replit
     if PARKSYDE_WEBHOOK:
         try:
             requests.post(PARKSYDE_WEBHOOK, json={
