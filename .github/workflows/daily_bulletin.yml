@@ -25,7 +25,7 @@ jobs:
 
       - name: Set date
         id: date
-        run: echo "date=$(TZ='Australia/Brisbane' date '+%Y-%m-%d')" >> $GITHUB_OUTPUT
+        run: echo "date=$(TZ='Australia/Brisbane' date +%Y-%m-%d)" >> $GITHUB_OUTPUT
 
       - name: Generate bulletin
         env:
@@ -35,15 +35,24 @@ jobs:
           PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
         run: python generate_bulletin.py
 
+      - name: Merge audio segments
+        run: |
+          DATE=$(TZ='Australia/Brisbane' date +%Y-%m-%d)
+          AUDIO_DIR="output/$DATE/audio"
+          ls $AUDIO_DIR/seg*.mp3 | sort | \
+            awk '{print "file \047" $0 "\047"}' > /tmp/filelist.txt
+          ffmpeg -f concat -safe 0 -i /tmp/filelist.txt \
+            -c copy $AUDIO_DIR/bulletin_full.mp3
+
       - name: Commit output
         run: |
           git config user.name "ParkSyde Bot"
-          git config user.email "bot@parksyde.com.au"
+          git config user.email "bot@parksyde.com"
           git stash
           git pull --rebase
           git stash pop
-          git add output/
-          git diff --staged --quiet || git commit -m "Bulletin ${{ steps.date.outputs.date }}"
+          git add -A output/
+          git diff --staged --quiet || git commit -m "Daily bulletin ${{ steps.date.outputs.date }}"
           git push
 
       - uses: actions/upload-artifact@v4
