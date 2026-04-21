@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, json, datetime, requests, time
+import os, json, datetime, requests, time, re
 from pathlib import Path
 
 ANTHROPIC_API_KEY  = os.environ["ANTHROPIC_API_KEY"]
@@ -55,19 +55,31 @@ def claude(prompt, system="", max_tokens=4000, use_search=False):
             time.sleep(30)
     raise Exception("All retries failed")
 
-def clean(raw):
+def extract_json(raw):
+    """Pull the first valid JSON object out of a Claude response."""
     raw = raw.strip()
+    # Strip code fences
     if "```json" in raw:
-        raw = raw.split("```json", 1)[1]
-        if "```" in raw:
-            raw = raw.split("```", 1)[0]
+        raw = raw.split("```json", 1)[1].split("```", 1)[0]
     elif "```" in raw:
-        raw = raw.split("```", 1)[1]
-        if "```" in raw:
-            raw = raw.split("```", 1)[0]
-    elif "{" in raw:
-        raw = raw[raw.index("{"):]
-    return raw.strip()
+        raw = raw.split("```", 1)[1].split("```", 1)[0]
+    # Find the outermost { ... }
+    start = raw.find("{")
+    end = raw.rfind("}")
+    if start == -1 or end == -1:
+        raise ValueError("No JSON object found in response")
+    return raw[start:end + 1].strip()
+
+def parse_bulletin(raw):
+    """Parse JSON with a fallback that strips common bracket glitches."""
+    candidate = extract_json(raw)
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError as e:
+        print(f"First parse failed: {e}. Attempting cleanup...")
+        # Remove stray [something] tags inside strings (stage directions etc)
+        cleaned = re.sub(r'\[([A-Za-z][A-Za-z\s]{1,40})\]', '', candidate)
+        return json.loads(cleaned)
 
 def generate_tts(text, speaker, filename):
     """Generate audio via ElevenLabs and save as MP3."""
@@ -80,7 +92,8 @@ def generate_tts(text, speaker, filename):
         "xi-api-key": ELEVENLABS_API_KEY,
         "Content-Type": "application/json"
     }
-    clean_text = text.replace("[Australian accent]", "").replace("[Australian acce", "")
+    # Strip any residual stage directions before sending to TTS
+    clean_text = re.sub(r'\[[^\]]*\]', '', text).strip()
     body = {
         "text": clean_text,
         "model_id": "eleven_turbo_v2_5",
@@ -116,99 +129,14 @@ def main():
     print(f"ParkSyde Bright Side — {DATE_STR}")
 
     print("[1/3] Fetching news and writing scripts...")
-    news_raw = claude(
-        prompt=f"""Today is {DAY_NAME}. Search for today's real news and write a complete ParkSyde Bright Side bulletin.
+
+    prompt = f"""Today is {DAY_NAME}. Search for today's real news and write a complete ParkSyde Bright Side bulletin.
 
 ParkSyde is a Queensland lifestyle brand. Pillars: environment, science, sports, weather.
 Hosts: Alex Mercer (charlie voice, casual Aussie bloke). Co-host: Jamie (alice voice, upbeat).
 Meteorologist: Sam (charlie voice). Warm dry Autumn weather in SE Queensland.
 
-Return ONLY this JSON structure, no other text:
-{{
-  "stories": {{
-    "environment": ["story 1 headline", "story 2 headline"],
-    "science": ["story 1 headline"],
-    "sports": ["story 1 headline"],
-    "overview": "awe-inspiring story headline"
-  }},
-  "seg1_open": [
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}}
-  ],
-  "seg2_green": [
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}}
-  ],
-  "seg3_science": [
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}}
-  ],
-  "seg4_weather": "[Australian accent] Cheers Alex...",
-  "seg5_sports": [
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}}
-  ],
-  "seg6_outro": [
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}},
-    {{"speaker": "alice", "text": "[Australian accent] ..."}},
-    {{"speaker": "charlie", "text": "[Australian accent] ..."}}
-  ]
-}}
-
-Use today's REAL news. Make each speaker line 2-3 sentences.""",
-        system="You are the head writer for ParkSyde Bright Side, a daily good news bulletin. Always return valid JSON only, no preamble.",
-        max_tokens=4000,
-        use_search=True
-    )
-
-    try:
-        data = json.loads(clean(news_raw))
-    except Exception as e:
-        print(f"JSON parse error: {e}\nRaw: {news_raw[:500]}")
-        raise
-
-    print("[2/3] Writing script files...")
-    stories = data.get("stories", {})
-    for key in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        val = data.get(key, [])
-        (OUTPUT_DIR / f"{key}.json").write_text(json.dumps(val, indent=2))
-    seg4 = data.get("seg4_weather", "")
-    (OUTPUT_DIR / "seg4_weather.txt").write_text(seg4)
-
-    manifest = {
-        "date": DATE_STR, "day": DAY_NAME,
-        "generated_at": datetime.datetime.utcnow().isoformat(),
-        "stories": stories,
-        "has_audio": bool(ELEVENLABS_API_KEY)
-    }
-    (OUTPUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2))
-    Path("output/latest.json").write_text(json.dumps(manifest, indent=2))
-
-    print("[3/3] Generating TTS audio...")
-    for seg_id in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        script = data.get(seg_id, [])
-        generate_segment_audio(seg_id, script)
-    generate_segment_audio("seg4_weather", data.get("seg4_weather", ""))
-
-    if PARKSYDE_WEBHOOK:
-        try:
-            requests.post(PARKSYDE_WEBHOOK, json={
-                "date": DATE_STR, "day": DAY_NAME,
-                "scripts": {k: data.get(k) for k in ["seg1_open","seg2_green","seg3_science","seg4_weather","seg5_sports","seg6_outro"]},
-                "stories": stories,
-                "secret": os.environ.get("PARKSYDE_WEBHOOK_SECRET")
-            }, timeout=30)
-            print("✓ Replit notified")
-        except Exception as e:
-            print(f"Replit ping failed: {e}")
-
-    print(f"✅ Done! Output in {OUTPUT_DIR}/")
-
-if __name__ == "__main__":
-    main()
+STRICT OUTPUT RULES:
+- Return ONLY a single JSON object. No preamble, no markdown, no code fences.
+- The "text" field of every line must contain ONLY the spoken words.
+- Do NOT include stage directions, accent notes, or bracketed instructions (​​​​​​​​​​​​​​​​
