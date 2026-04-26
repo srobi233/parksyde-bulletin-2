@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Right, sports fans, here's something that'll knock your socks off. Cricket Australia's gone full sci-fi with their new app feature that's got everyone talking. <cite index='17-2,17-3'>The app's new AI Insights feature provides live insights on player milestones, records and key moments using OpenAI's GPT-5, allowing fans to access context and ask follow-up questions about insights provided.</cite>"
+  },
+  {
+    "speaker": "alice",
+    "text": "That's incredible - finally an app that can explain why everyone's getting excited about some bloke hitting a ball! <cite index='17-6'>AI Insights showed that Travis Head's 172 runs for the match were his fifth-highest aggregate total in a test.</cite> Perfect for cricket newbies like me who want to understand what all the fuss is about."
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index='17-7'>With the initial success of the AI Insights feature, other sports organizations have reached out to learn more about how it was developed and the impact on the fanbase.</cite> Cricket leading the charge in sports tech - who would've thought? It's all about getting more kids falling in love with the game, which is pretty special really."
+  }
+]

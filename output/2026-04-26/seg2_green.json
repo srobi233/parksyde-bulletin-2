@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Alright green thumbs, starting with some proper clever science from overseas - researchers have cracked the code on dirt-powered batteries. <cite index='1-21,1-22'>Scientists have developed a fuel cell that uses microbes in soil to produce electricity, powering underground sensors for tasks like monitoring moisture or detecting touch, without needing batteries or solar panels.</cite> Basically, they've taught dirt to work for us!"
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's brilliant - imagine never having to change batteries in your soil sensors again. Meanwhile, there's massive news on the ocean front: <cite index='8-11,8-12'>the High Seas Biodiversity Treaty aimed to protect 60% of the global ocean entered into force globally, safeguarding marine ecosystems beyond national borders.</cite> That's like creating the world's biggest marine park."
+  },
+  {
+    "speaker": "alice",
+    "text": "And closer to home, we've got a heartwarming conservation story that'll make you smile. <cite index='4-14,4-15,4-16'>Researchers have described a new-to-science species of skink that may be one of Australia's most threatened reptiles, with possibly fewer than 20 individuals living in rocky gorge within Mutawintji National Park in New South Wales.</cite> They've named it Kungaka, meaning 'the Hidden One' - how perfect is that?"
+  }
+]
