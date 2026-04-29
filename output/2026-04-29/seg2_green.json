@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "<cite index=\"12-1,12-17\">Over in Colombia, they're hosting the world's first conference specifically about transitioning away from fossil fuels, and it's not just talk - they reckon this could reduce global greenhouse emissions by up to 10% by 2030</cite>. That's genuinely massive progress from what was just wishful thinking a few years back."
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index=\"16-1,16-11\">Meanwhile closer to home, clean energy is absolutely smashing it - the US is on track for a landmark year in renewable energy development</cite>. <cite index=\"17-11,17-14\">And get this - wind and solar generated 30% of EU electricity last year, overtaking fossil fuels at 29% for the first time ever</cite>."
+  },
+  {
+    "speaker": "alice",
+    "text": "The momentum is just incredible isn't it? <cite index=\"17-15,17-16\">Coal dropped to a record low of just 9.2% in the EU, while low-carbon sources now supply 71% of their electricity</cite>. These aren't pie-in-the-sky promises anymore - this is happening right now, today."
+  }
+]
