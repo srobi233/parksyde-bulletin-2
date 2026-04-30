@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Let's start with some phenomenal news from our national electricity market. <cite index='13-12'>Renewable energy sources accounted for 49.9% of electricity generated across the National Electricity Market in the December quarter</cite>, which includes us here in Queensland."
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's massive Jamie! And it gets even better - <cite index='13-17'>in Western Australia's grid, renewables provided an average 50.7% of electricity generation</cite>. We're genuinely becoming that renewable energy superpower everyone's been talking about."
+  },
+  {
+    "speaker": "alice",
+    "text": "Speaking of superpowers, there's brilliant news from ARENA with <cite index='12-8'>over $4 million in funding announced for the first two projects under its Battery Breakthrough Initiative</cite>. These projects are focusing on next-generation battery tech and advanced manufacturing - right here in Australia."
+  }
+]

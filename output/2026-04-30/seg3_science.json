@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now for some mind-blowing science news. <cite index='19-7'>Tandem perovskite solar cells have reached power conversion efficiencies over 34%</cite>, which is a massive improvement over existing commercial panels that max out around 24%."
+  },
+  {
+    "speaker": "alice",
+    "text": "That's incredible! And there's more good news on the battery front. <cite index='19-15'>New material science battery technologies are surpassing current lithium-ion batteries in cost and material availability, with several options ready for commercialization in 2026</cite>."
+  },
+  {
+    "speaker": "charlie",
+    "text": "What's particularly exciting is these metal-air batteries use abundant metals without the supply constraints of lithium. It's like watching the future unfold right before our eyes, and Australia's right at the forefront of it all."
+  }
+]
