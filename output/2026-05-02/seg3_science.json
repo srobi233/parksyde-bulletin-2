@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now for some science that sounds like it's straight out of a sci-fi movie. <cite index='22-3'>Scientists have created a powerful new way to control quantum systems, achieving the first-ever demonstration of quadsqueezing</cite> at Oxford University. It's as complex as it sounds, but basically opens up whole new possibilities for quantum technology."
+  },
+  {
+    "speaker": "alice",
+    "text": "And here's something that could help millions of people - <cite index='22-15'>researchers have developed tiny DNA-based molecules that shut down PCSK9\u2014a key protein that keeps bad LDL cholesterol circulating in the blood</cite>. This could revolutionise how we treat high cholesterol without traditional drugs."
+  },
+  {
+    "speaker": "charlie",
+    "text": "The really exciting bit is that <cite index='22-16'>by blocking this protein, cells can absorb more cholesterol instead of letting it build up in arteries, dramatically lowering</cite> the risk of heart disease. Science just keeps finding ways to make our lives better, doesn't it?"
+  }
+]
