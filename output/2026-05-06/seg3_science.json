@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now here's a breakthrough that could change everything - UK scientists have developed a revolutionary blood test that can detect around 50 different types of cancer before any symptoms appear. We're talking about a single blood test that checks for DNA fragments released by cancer cells and can pinpoint exactly which organ or tissue the signal's coming from."
+  },
+  {
+    "speaker": "alice",
+    "text": "That's absolutely incredible, Alex. Think about it - catching cancer before you even know it's there could save millions of lives and spare families from those devastating late-stage diagnoses. The clinical trials are happening right now, so this isn't pie-in-the-sky stuff - this is real science making real progress."
+  },
+  {
+    "speaker": "charlie",
+    "text": "And speaking of real progress, IBM and their partners just achieved something pretty special with quantum computing - they simulated a protein complex with over 12,000 atoms using quantum systems linked to Japanese supercomputers. It's another step toward using quantum tech for drug discovery and understanding disease mechanisms at the molecular level."
+  }
+]
