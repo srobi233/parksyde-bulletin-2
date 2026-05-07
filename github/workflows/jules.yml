@@ -1,0 +1,39 @@
+name: ParkSyde Jules
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  jules:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Jules CLI
+        run: npm install -g @google/jules
+
+      - name: Run Jules
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          jules run \
+            --source . \
+            --out ./jules-output \
+            --format markdown
+
+      - name: Upload Jules Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: jules-output
+          path: jules-output
