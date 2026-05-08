@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Science nerds, this one's for you. <cite index='22-20,22-21'>Scientists have managed to connect time crystals - quantum systems that repeat their motion endlessly like a clock that never winds down - to an external device for the first time</cite>. Basically, they've got perpetual motion happening at the quantum level, which is bonkers."
+  },
+  {
+    "speaker": "alice",
+    "text": "And in medical news that could help millions, <cite index='22-8,22-9'>researchers have developed tiny DNA-based molecules that shut down PCSK9, a key protein that keeps bad LDL cholesterol circulating in the blood. By blocking this protein, cells can absorb more cholesterol instead of letting it build up in arteries</cite>. Game-changing stuff for heart health."
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index='24-1,24-6,24-7'>A common constipation drug may have unexpectedly unlocked a new way to slow chronic kidney disease. In a clinical trial involving 150 patients, researchers found that lubiprostone could be a breakthrough for a condition that affects millions and often leads to dialysis</cite>. Sometimes the best discoveries are hiding in plain sight."
+  }
+]
