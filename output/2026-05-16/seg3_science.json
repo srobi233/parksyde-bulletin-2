@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now let's talk about some science that's literally out of this world. <cite index='14-13'>Scientists at UC Santa Barbara have created a remarkable new material that works like a 'rechargeable solar battery,' storing sunlight inside tiny molecules and releasing it later as heat</cite>. They're basically bottling sunshine, which sounds like something from a fairy tale!"
+  },
+  {
+    "speaker": "alice",
+    "text": "That's incredible! And here's another breakthrough that could change everything - <cite index='14-1,14-2'>scientists in Japan have developed a new way to instantly detect elusive quantum 'W states,' a major milestone for quantum technology. The breakthrough could help unlock faster quantum communication, teleportation, and powerful new computing</cite>."
+  },
+  {
+    "speaker": "charlie",
+    "text": "Quantum teleportation, eh? We might not be beaming up to the Enterprise just yet, but we're definitely getting closer. And here's something that hits close to home - <cite index='14-12,14-13'>a casual conversation between graduate students helped spark a breakthrough in aging research at Mayo Clinic. Researchers discovered that tiny synthetic DNA molecules called aptamers can selectively attach to senescent 'zombie cells'</cite>."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Right, so here's something to celebrate - Europe just hit a massive milestone this week. <cite index='22-2,22-31'>Wind and solar generated 30% of EU electricity in 2025, overtaking fossil fuels at 29% for the first time</cite>. That's history in the making right there!"
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's absolutely huge! And speaking of green wins, there's some fantastic news from down in New Zealand. <cite index='22-6,22-7'>New Zealand's kakapo, one of the world's rarest birds with just 235 adults, has just completed its most successful breeding season on record. Over 100 chicks hatched in 2026, beating the previous best of 85 from 2019</cite>."
+  },
+  {
+    "speaker": "alice",
+    "text": "Those cheeky kakapos are basically the comeback kids of the bird world! And get this - <cite index='22-8'>vets even performed CPR on struggling chicks to help them through - and it worked</cite>. Now that's dedication to conservation."
+  }
+]
