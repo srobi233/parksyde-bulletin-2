@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now Jamie, you know how we're always banging on about the next big thing in tech? Well, <cite index='21-26,21-27'>quantum technology is rapidly moving beyond controlled laboratory experiments into practical use, with the field reaching a critical phase that mirrors the early era of classical computing before the transistor reshaped modern technology</cite>. This is huge!"
+  },
+  {
+    "speaker": "alice",
+    "text": "And the best part? <cite index='23-5'>Scientists at UC Santa Barbara have created a remarkable new material that works like a rechargeable solar battery, storing sunlight inside tiny molecules and releasing it later as heat</cite>. Imagine having a bottle of sunshine sitting on your kitchen bench, ready to heat your dinner whenever you need it."
+  },
+  {
+    "speaker": "charlie",
+    "text": "Speaking of breakthroughs, researchers are also tackling some serious medical challenges. <cite index='22-8,22-9'>A casual conversation between graduate students sparked a breakthrough in aging research at Mayo Clinic, with researchers discovering that synthetic DNA molecules called aptamers can selectively attach to zombie cells linked to aging and cancer</cite>. Sometimes the best discoveries happen over a coffee chat!"
+  }
+]
