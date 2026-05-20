@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Right, the environment segment's got some absolute ripper news today. <cite index='3-1,3-12'>Scientists have figured out how to turn plastic waste into clean hydrogen fuel using nothing but sunlight.</cite> It's like turning trash into treasure, but for real."
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index='3-12,3-13'>While it's still in development, this could literally transform our rubbish into valuable fuel for the future.</cite> Meanwhile, over in the lab, researchers have created some next-level algae that acts like a magnet for microplastics in water."
+  },
+  {
+    "speaker": "alice",
+    "text": "<cite index='3-6'>These special algae produce limonene - that's the orange-scented stuff - which helps them grab onto those tiny plastic particles floating in our waterways.</cite> It's brilliant because nature's basically doing the cleanup for us."
+  }
+]

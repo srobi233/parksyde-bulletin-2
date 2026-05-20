@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "The science news today is absolutely massive. <cite index='11-7'>Scientists have used breakthrough nanotechnology to actually reverse Alzheimer's symptoms in mice by restoring their brain's natural cleanup system.</cite> These tiny engineered particles cleared out the toxic proteins and even repaired the blood-brain barrier."
+  },
+  {
+    "speaker": "alice",
+    "text": "That's incredible progress for something that affects so many families. And space fans are gonna love this - <cite index='9-5,9-6'>NASA's Nancy Grace Roman Space Telescope is now aiming for an earlier launch in September this year.</cite>"
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index='9-6'>This thing's designed to explore dark matter, dark energy, and distant exoplanets with these massive, ultra-detailed surveys of the cosmos.</cite> We're talking about potentially finding Earth-like worlds out there."
+  }
+]
