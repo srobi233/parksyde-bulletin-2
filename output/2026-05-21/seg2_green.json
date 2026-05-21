@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Right then, let's dive into our green segment and boy oh boy, do we have some epic environmental wins today! <cite index=\"6-10\">Solar power is set to become the world's single largest source of electricity in the next six years</cite>, thanks to falling prices and massive supply growth. We're literally watching history in the making here!"
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's massive Jamie! And here's the kicker - <cite index=\"12-13,12-15\">both China and India recorded their first simultaneous drop in coal power generation since 1973</cite>. China's down 1.6% and India's dropped 3% as they both deployed record amounts of renewables last year."
+  },
+  {
+    "speaker": "alice",
+    "text": "Absolutely love that momentum! Plus, <cite index=\"13-4,13-5\">wind and solar produced 30% of the EU's electricity in 2025, officially overtaking fossil fuels at 29%</cite>. Experts are calling it a major energy tipping point - renewables aren't just an alternative anymore, they're becoming the backbone of Europe's power grid!"
+  }
+]

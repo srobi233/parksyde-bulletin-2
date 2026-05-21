@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Time for some mind-blowing science news that dropped just today! <cite index=\"15-2,15-3\">Researchers discovered that leucine, a nutrient found in protein-rich foods, can supercharge mitochondria by protecting crucial energy-producing proteins inside cells</cite>. So your steak dinner might literally be powering you up at the cellular level!"
+  },
+  {
+    "speaker": "alice",
+    "text": "That's incredible Alex! And there's more from MIT - <cite index=\"15-3,16-3\">scientists have identified cysteine as a potent trigger for intestinal repair</cite>. Found in meat, dairy, beans and nuts, it activated immune cells that released healing signals in mice. Our guts might have their own repair crew just waiting for the right fuel!"
+  },
+  {
+    "speaker": "charlie",
+    "text": "Science just keeps delivering the goods! And if you're into space exploration, <cite index=\"19-1\">astronomers have discovered Ross 318 b, a candidate temperate super-Earth orbiting within the habitable zone of a nearby red dwarf</cite>. It's got six times Earth's mass and takes 40 days to orbit its star. The universe just keeps getting more interesting!"
+  }
+]
