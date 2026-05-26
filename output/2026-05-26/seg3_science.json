@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "<cite index='4-2,4-3'>Scientists at UC Davis have developed an AI-powered chip that can analyze light and chemicals, and it's tiny enough to fit almost anywhere</cite>. We're talking lab-quality analysis in something the size of a grain of sand - absolutely mind-blowing stuff."
+  },
+  {
+    "speaker": "alice",
+    "text": "<cite index='4-1,4-11'>Meanwhile, massive supercomputer simulations have just unlocked a cosmic magnetic mystery, showing how the universe builds enormous magnetic fields out of turbulence</cite>. It could reshape our understanding of stars and black holes completely."
+  },
+  {
+    "speaker": "charlie",
+    "text": "<cite index='4-3,4-4'>And here's one for the treasure hunters - scientists have created a global treasure map pointing to hidden rare earth deposits by figuring out where those strange volcanic rocks are most likely to form</cite>. Pretty handy for finding the materials we need for all our green tech."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "<cite index='7-20,3-12'>Scientists have cracked the code on turning plastic waste into clean hydrogen fuel using nothing but sunlight</cite>. This could be a game-changer for both our pollution and energy problems - essentially turning trash into treasure."
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's brilliant! And get this - <cite index='1-12,3-6'>researchers have also developed special algae that can grab microplastics out of water almost like a magnet</cite>. The little green guys produce an orange-scented oil that helps them bind to those nasty plastic particles."
+  },
+  {
+    "speaker": "alice",
+    "text": "<cite index='11-1,11-8'>Right here in Australia, we're building our first 100 percent electric accessible passenger ferry</cite>, and <cite index='8-1,8-2'>cultural burning is helping restore koala habitat on the NSW North Coast</cite>. Sometimes the old ways really are the best ways, aren't they?"
+  }
+]
