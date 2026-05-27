@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "Now here's one for the science nerds. <cite index='5-1'>Scientists at the University of Houston have shattered a long-standing superconductivity record, creating a material that can conduct electricity with zero resistance at the highest temperature ever achieved under normal pressure conditions</cite>. That's a proper game-changer for everything from power grids to medical devices."
+  },
+  {
+    "speaker": "alice",
+    "text": "Meanwhile in Canada, researchers discovered something pretty wild. <cite index='3-4,3-5'>Ancient underground rocks are naturally producing hydrogen gas, with measurements from mine boreholes in Ontario showing the gas can flow continuously for years, offering a potential new source</cite>. Mother Nature's been making clean fuel all along."
+  },
+  {
+    "speaker": "charlie",
+    "text": "And here's a tiny discovery with a big name. <cite index='5-3'>A sea slug smaller than a sesame seed has turned up in Taiwan's coastal waters and it's so tiny and unusual that scientists realised they had discovered a completely new species</cite>. Sometimes the biggest discoveries come in the smallest packages."
+  }
+]
