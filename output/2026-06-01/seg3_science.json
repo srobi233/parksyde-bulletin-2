@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "charlie",
+    "text": "<cite index='6-19,6-21'>Nvidia unveiled a new processor for personal computers at the GTC conference in Taiwan today</cite>, and their CEO reckons it's as big a deal as turning phones into smartphones. That's saying something mate."
+  },
+  {
+    "speaker": "alice",
+    "text": "The tech world's going absolutely mad for it too! <cite index='6-8,6-9'>Nvidia shares climbed more than 6% after the announcement, with Dell Technologies and HP Inc following higher, rising more than 10% and 8% respectively</cite>. When the money people get that excited, you know something big is happening."
+  },
+  {
+    "speaker": "charlie",
+    "text": "And speaking of big things, we've got some proper space news brewing. <cite index='7-6,7-13'>Virgin Galactic recently said that VSS Unity, its prototype spaceship, has returned to the skies above Spaceport America in New Mexico</cite>. They're getting ready for some serious space tourism action, which is pretty bloody exciting if you ask me."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "speaker": "alice",
+    "text": "Right, let's start with some brilliant environmental news that shows how we can actually solve problems when we get creative. <cite index='12-2,12-5'>Scientists have developed a solar desalination system that turns seawater into drinking water without creating environmentally damaging brine</cite>. How good is that?"
+  },
+  {
+    "speaker": "charlie",
+    "text": "That's massive news Jamie. <cite index='12-2,12-5'>Special laser-textured metal panels use sunlight to evaporate water while automatically moving salt</cite> - so we're basically teaching the sun to give us fresh water without the nasty side effects. Proper clever stuff."
+  },
+  {
+    "speaker": "alice",
+    "text": "And here's something that shows conservation can work, even when it gets tricky. <cite index='12-1,12-4'>A world-famous conservation program that helped save Sweden's endangered wolverines is now struggling as funding stagnates and local trust erodes</cite>, but the fact they actually saved those wolverines in the first place proves we can do it. Sometimes the hard work comes after the success, you know?"
+  }
+]
