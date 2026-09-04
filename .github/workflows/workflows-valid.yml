@@ -1,0 +1,54 @@
+name: Workflows valid
+
+# The Bright Side stopped running on 22 July 2026 and nobody noticed for six
+# weeks. Not because a run failed — because a corrected copy of
+# generate_bulletin.py was pasted into daily_bulletin.yml by mistake, which
+# made the YAML un-parseable. GitHub does not fail an invalid workflow: it
+# stops scheduling it. No red X, no email, no run. Just silence.
+#
+# This job exists so that silence is impossible. It lives in a second file,
+# so a paste that breaks one workflow is caught by the other, and it reports
+# a normal, visible failure.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Every workflow file is valid YAML
+        run: |
+          python - <<'PY'
+          import sys, pathlib, yaml
+          bad = []
+          files = sorted(pathlib.Path('.github/workflows').glob('*.y*ml'))
+          if not files:
+              sys.exit('No workflow files found — that is itself wrong.')
+          for f in files:
+              try:
+                  doc = yaml.safe_load(f.read_text(encoding='utf-8'))
+                  if not isinstance(doc, dict) or 'jobs' not in doc:
+                      bad.append((f, 'parsed, but has no jobs: block'))
+                  else:
+                      print('OK  ' + str(f))
+              except Exception as e:
+                  bad.append((f, type(e).__name__ + ': ' + str(e).replace('\n', ' ')[:200]))
+          for f, why in bad:
+              print('BAD ' + str(f) + ' -> ' + why)
+          if bad:
+              sys.exit(str(len(bad)) + ' workflow file(s) will not run.')
+          PY
+
+      - name: Every Python file compiles
+        run: python -m compileall -q .

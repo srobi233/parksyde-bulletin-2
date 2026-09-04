@@ -1,11 +1,60 @@
 #!/usr/bin/env python3
-import os, json, datetime, requests, time, re
+"""
+ParkSyde Bright Side — daily good-news bulletin generator.
+
+Runs once a day from .github/workflows/daily_bulletin.yml. Asks Claude to
+search today's real news, write a six-segment script, then (optionally) turns
+each spoken line into audio with ElevenLabs and writes everything under
+output/<date>/.
+
+Two things broke this pipeline between June and September 2026, and both are
+guarded against here because neither announced itself:
+
+  1. The model id was pinned to a dated snapshot ("claude-sonnet-4-20250514")
+     that was later retired. The API answered 404. The retry loop caught the
+     exception, printed "Attempt N failed", slept, and retried three more
+     times — so the log said "All retries failed" and never once printed the
+     word "model". Four identical retries of a request that can never succeed
+     is not resilience, it is a blindfold. Client errors now stop immediately
+     and print the API's own response body.
+
+  2. A corrected copy of this file was pasted into the workflow YAML by
+     mistake, which made the workflow un-parseable. GitHub silently stopped
+     scheduling it — no red X, no email, just nothing. See the README.
+"""
+
+import os, sys, json, datetime, time, re
 from pathlib import Path
 
-ANTHROPIC_API_KEY  = os.environ["ANTHROPIC_API_KEY"]
-ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY")
-PARKSYDE_WEBHOOK   = os.environ.get("PARKSYDE_WEBHOOK")
-MODEL     = "claude-sonnet-4-20250514"
+try:
+    import requests
+except ModuleNotFoundError:
+    sys.exit("FATAL: the 'requests' package is not installed. The workflow "
+             "installs it in the 'Install dependencies' step — check that "
+             "step still exists in .github/workflows/daily_bulletin.yml.")
+
+# --- required secret: fail loudly and clearly rather than with a raw KeyError
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+if not ANTHROPIC_API_KEY:
+    sys.exit("FATAL: ANTHROPIC_API_KEY is not set. Add it under Settings -> "
+             "Secrets and variables -> Actions, and make sure it is passed "
+             "through the workflow's env: block.")
+
+ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY")   # optional — audio
+PARKSYDE_WEBHOOK   = os.environ.get("PARKSYDE_WEBHOOK")     # optional — ping
+
+# Model. Sonnet is the deliberate choice for a daily unattended run: this
+# bulletin writes 20-odd short spoken lines from search results, which Sonnet
+# does well, and the pipeline has to survive on a budget nobody is watching.
+# For a noticeably richer script, swap this one line to "claude-opus-5".
+# Do NOT append a date to these ids — a dated snapshot is what died in June.
+MODEL = "claude-sonnet-5"
+
+# Server-side web search tool version. Current on Sonnet 5 and Opus 5. If you
+# ever pin MODEL to an older model, this must go back to "web_search_20250305"
+# — the tool type and the model version have to agree or the API returns 400.
+WEB_SEARCH_TOOL = "web_search_20260209"
+
 TODAY     = datetime.date.today()
 DATE_STR  = TODAY.strftime("%Y-%m-%d")
 DAY_NAME  = TODAY.strftime("%A, %B %-d")
@@ -28,7 +77,7 @@ PROMPT_TEMPLATE = """Today is __DAY__. Search for today's real news and write a 
 
 ParkSyde is a Queensland lifestyle brand. Pillars: environment, science, sports, weather.
 Hosts: Alex Mercer (charlie voice, casual Aussie bloke). Co-host: Jamie (alice voice, upbeat).
-Meteorologist: Sam (charlie voice). Warm dry Autumn weather in SE Queensland.
+Meteorologist: Sam (charlie voice). South-east Queensland weather.
 
 STRICT OUTPUT RULES:
 - Return ONLY a single JSON object. No preamble, no markdown, no code fences.
@@ -75,7 +124,7 @@ Return this exact structure:
   ]
 }
 
-Use today's REAL news. Make each speaker line 2-3 sentences. Warm dry Australian humour, no schlock."""
+Use today's REAL news. Make each speaker line 2-3 sentences. Warm, dry Australian humour, no schlock."""
 
 SYSTEM_PROMPT = (
     "You are the head writer for ParkSyde Bright Side, a daily good news bulletin. "
@@ -83,35 +132,65 @@ SYSTEM_PROMPT = (
     "You never include stage directions, brackets, or unescaped quotes inside string values."
 )
 
+
 def claude(prompt, system="", max_tokens=4000, use_search=False):
     body = {
         "model": MODEL,
         "max_tokens": max_tokens,
         "messages": [{"role": "user", "content": prompt}]
     }
-    if system: body["system"] = system
-    if use_search: body["tools"] = [{"type": "web_search_20250305", "name": "web_search"}]
+    if system:
+        body["system"] = system
+    if use_search:
+        # Server-side search: Anthropic runs the searches and returns final text.
+        body["tools"] = [{
+            "type": WEB_SEARCH_TOOL,
+            "name": "web_search",
+            "max_uses": 5
+        }]
+
     for attempt in range(4):
         try:
             resp = requests.post(
                 "https://api.anthropic.com/v1/messages",
-                headers=HEADERS, json=body
+                headers=HEADERS, json=body, timeout=180
             )
+
             if resp.status_code == 429:
                 wait = 60 * (attempt + 1)
-                print("Rate limited — waiting " + str(wait) + "s")
+                print("Rate limited - waiting " + str(wait) + "s")
                 time.sleep(wait)
                 continue
-            resp.raise_for_status()
+
+            # Any other 4xx is a request problem — a retired model id, a tool
+            # type the model does not accept, a revoked key, no credit. Retrying
+            # cannot fix it and, worse, buries the reason. Stop and show the
+            # API's own words. This is the guard that would have named the
+            # June failure in the first line of the log.
+            if 400 <= resp.status_code < 500:
+                sys.exit(
+                    "FATAL: Anthropic API returned " + str(resp.status_code) +
+                    " for model '" + MODEL + "'.\n"
+                    "This is a request problem (model id, web-search tool "
+                    "version, API key, or billing), not a transient one, so "
+                    "retrying is pointless.\nResponse body:\n" + resp.text
+                )
+
+            resp.raise_for_status()          # 5xx and network errors -> retry
             data = resp.json()
             return "\n".join(
                 b["text"] for b in data.get("content", [])
                 if b.get("type") == "text"
             )
+        except SystemExit:
+            raise
         except Exception as e:
             print("Attempt " + str(attempt + 1) + " failed: " + str(e))
             time.sleep(30)
-    raise Exception("All retries failed")
+
+    raise Exception("All retries failed (server kept returning 5xx or the "
+                    "network kept dropping)")
+
 
 def extract_json(raw):
     raw = raw.strip()
@@ -125,18 +204,22 @@ def extract_json(raw):
         raise ValueError("No JSON object found in response")
     return raw[start:end + 1].strip()
 
+
 def parse_bulletin(raw):
     candidate = extract_json(raw)
     try:
         return json.loads(candidate)
     except json.JSONDecodeError as e:
+        # Occasionally a stage direction survives the prompt rules. Strip
+        # short bracketed asides and try once more before giving up.
         print("First parse failed: " + str(e) + ". Attempting cleanup...")
         cleaned = re.sub(r'\[([A-Za-z][A-Za-z\s]{1,40})\]', '', candidate)
         return json.loads(cleaned)
 
+
 def generate_tts(text, speaker, filename):
     if not ELEVENLABS_API_KEY:
-        print("  No ElevenLabs key — skipping TTS")
+        print("  No ElevenLabs key - skipping TTS")
         return False
     voice_id = VOICES.get(speaker, VOICES["charlie"])
     url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
@@ -151,15 +234,18 @@ def generate_tts(text, speaker, filename):
         "voice_settings": {"stability": 0.5, "similarity_boost": 0.75}
     }
     try:
-        resp = requests.post(url, headers=headers, json=body)
+        resp = requests.post(url, headers=headers, json=body, timeout=120)
         resp.raise_for_status()
         with open(filename, "wb") as f:
             f.write(resp.content)
         print("  TTS OK: " + filename)
         return True
     except Exception as e:
+        # Audio is a bonus, not the bulletin. A failed voice line must not
+        # cost the day's scripts, so this reports and carries on.
         print("  TTS failed for " + filename + ": " + str(e))
         return False
+
 
 def generate_segment_audio(seg_id, script):
     audio_dir = OUTPUT_DIR / "audio"
@@ -175,8 +261,12 @@ def generate_segment_audio(seg_id, script):
             generate_tts(text, speaker, str(path))
             time.sleep(1)
 
+
+SEGMENTS = ["seg1_open", "seg2_green", "seg3_science", "seg5_sports", "seg6_outro"]
+
+
 def main():
-    print("ParkSyde Bright Side — " + DATE_STR)
+    print("ParkSyde Bright Side - " + DATE_STR + " (model: " + MODEL + ")")
     print("[1/3] Fetching news and writing scripts...")
 
     prompt = PROMPT_TEMPLATE.replace("__DAY__", DAY_NAME)
@@ -184,7 +274,8 @@ def main():
     data = None
     last_err = None
     for attempt in range(3):
-        news_raw = claude(prompt=prompt, system=SYSTEM_PROMPT, max_tokens=4000, use_search=True)
+        news_raw = claude(prompt=prompt, system=SYSTEM_PROMPT,
+                          max_tokens=4000, use_search=True)
         try:
             data = parse_bulletin(news_raw)
             break
@@ -198,15 +289,16 @@ def main():
 
     print("[2/3] Writing script files...")
     stories = data.get("stories", {})
-    for key in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        val = data.get(key, [])
-        (OUTPUT_DIR / (key + ".json")).write_text(json.dumps(val, indent=2))
-    seg4 = data.get("seg4_weather", "")
-    (OUTPUT_DIR / "seg4_weather.txt").write_text(seg4)
+    for key in SEGMENTS:
+        (OUTPUT_DIR / (key + ".json")).write_text(
+            json.dumps(data.get(key, []), indent=2))
+    (OUTPUT_DIR / "seg4_weather.txt").write_text(data.get("seg4_weather", ""))
 
     manifest = {
-        "date": DATE_STR, "day": DAY_NAME,
-        "generated_at": datetime.datetime.utcnow().isoformat(),
+        "date": DATE_STR,
+        "day": DAY_NAME,
+        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "model": MODEL,
         "stories": stories,
         "has_audio": bool(ELEVENLABS_API_KEY)
     }
@@ -214,24 +306,26 @@ def main():
     Path("output/latest.json").write_text(json.dumps(manifest, indent=2))
 
     print("[3/3] Generating TTS audio...")
-    for seg_id in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        script = data.get(seg_id, [])
-        generate_segment_audio(seg_id, script)
+    for seg_id in SEGMENTS:
+        generate_segment_audio(seg_id, data.get(seg_id, []))
     generate_segment_audio("seg4_weather", data.get("seg4_weather", ""))
 
     if PARKSYDE_WEBHOOK:
         try:
             requests.post(PARKSYDE_WEBHOOK, json={
-                "date": DATE_STR, "day": DAY_NAME,
-                "scripts": {k: data.get(k) for k in ["seg1_open","seg2_green","seg3_science","seg4_weather","seg5_sports","seg6_outro"]},
+                "date": DATE_STR,
+                "day": DAY_NAME,
+                "scripts": {k: data.get(k) for k in
+                            SEGMENTS + ["seg4_weather"]},
                 "stories": stories,
                 "secret": os.environ.get("PARKSYDE_WEBHOOK_SECRET")
             }, timeout=30)
-            print("Replit notified")
+            print("Webhook notified")
         except Exception as e:
-            print("Replit ping failed: " + str(e))
+            print("Webhook ping failed: " + str(e))
 
-    print("Done! Output in " + str(OUTPUT_DIR) + "/")
+    print("Done. Output in " + str(OUTPUT_DIR) + "/")
+
 
 if __name__ == "__main__":
     main()

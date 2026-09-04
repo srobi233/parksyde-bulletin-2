@@ -1,12 +1,20 @@
 name: Daily Bulletin
 
+# 20:00 UTC = 6am AEST. GitHub's scheduler is best-effort and can run late
+# under load; a bulletin that lands at 6:20 is still the morning's bulletin.
 on:
   schedule:
-    - cron: '0 20 * * *'  # 6am AEST (20:00 UTC previous day)
-  workflow_dispatch:       # allows manual trigger from Actions tab
+    - cron: '0 20 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+# Never let two days overlap. The job commits to main, so a second run
+# starting before the first has pushed would fight it.
+concurrency:
+  group: daily-bulletin
+  cancel-in-progress: false
 
 jobs:
   generate-bulletin:
@@ -24,302 +32,28 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install anthropic requests
+          pip install requests
+
+      - name: Check the generator parses
+        # Half a second, and it catches a truncated or mis-pasted script
+        # before the run spends a single token.
+        run: python -m py_compile generate_bulletin.py
 
       - name: Generate bulletin
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
           PARKSYDE_WEBHOOK_SECRET: ${{ secrets.PARKSYDE_WEBHOOK_SECRET }}
-        run: |
-          python generate_bulletin.py
+        run: python generate_bulletin.py
 
       - name: Commit output
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A output/
-          git diff --staged --quiet || git commit -m "Daily bulletin $(date +%Y-%m-%d)"
+          git diff --staged --quiet && echo "No new output to commit" && exit 0
+          git commit -m "Daily bulletin $(date +%Y-%m-%d)"
+          # Someone may have pushed while the bulletin was generating.
+          git pull --rebase origin main
           git push
-          #!/usr/bin/env python3
-import os, sys, json, datetime, time, re
-from pathlib import Path
-
-try:
-    import requests
-except ModuleNotFoundError:
-    sys.exit("FATAL: the 'requests' package is not installed. "
-             "Add a `pip install requests` step to the workflow (see bulletin.yml).")
-
-# --- required secret: fail loudly and clearly instead of a raw KeyError -------
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-if not ANTHROPIC_API_KEY:
-    sys.exit("FATAL: ANTHROPIC_API_KEY is not set. Add it in the repo under "
-             "Settings -> Secrets and variables -> Actions, and pass it through "
-             "the workflow's `env:` block (see bulletin.yml).")
-
-ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY")   # optional (audio)
-PARKSYDE_WEBHOOK   = os.environ.get("PARKSYDE_WEBHOOK")      # optional (ping)
-
-# Model: claude-opus-4-8 is Anthropic's most capable general model.
-# For a cheaper daily run, swap to "claude-sonnet-5" (same web-search tool
-# version below works for both). Do NOT append a date to these IDs.
-MODEL = "claude-opus-4-8"
-
-# Current web-search server-tool version (works on Opus 4.8/4.7/4.6 and
-# Sonnet 5 / 4.6). If you switch MODEL to an OLDER model, change this to the
-# basic "web_search_20250305".
-WEB_SEARCH_TOOL = "web_search_20260209"
-
-TODAY     = datetime.date.today()
-DATE_STR  = TODAY.strftime("%Y-%m-%d")
-DAY_NAME  = TODAY.strftime("%A, %B %-d")
-
-OUTPUT_DIR = Path("output/" + DATE_STR)
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-HEADERS = {
-    "x-api-key": ANTHROPIC_API_KEY,
-    "anthropic-version": "2023-06-01",
-    "Content-Type": "application/json"
-}
-
-VOICES = {
-    "charlie": "IKne3meq5aSn9XLyUdCD",
-    "alice":   "Xb7hH8MSUJpSbSDYk0k2",
-}
-
-PROMPT_TEMPLATE = """Today is __DAY__. Search for today's real news and write a complete ParkSyde Bright Side bulletin.
-
-ParkSyde is a Queensland lifestyle brand. Pillars: environment, science, sports, weather.
-Hosts: Alex Mercer (charlie voice, casual Aussie bloke). Co-host: Jamie (alice voice, upbeat).
-Meteorologist: Sam (charlie voice). Warm dry Autumn weather in SE Queensland.
-
-STRICT OUTPUT RULES:
-- Return ONLY a single JSON object. No preamble, no markdown, no code fences.
-- The text field of every line must contain ONLY the spoken words.
-- Do NOT include stage directions, accent notes, or bracketed instructions. No [Australian accent], no [laughs], no [pause]. The voices are already Australian.
-- Do NOT use double quotes inside any text value. If you need to quote something, use single quotes.
-- Do NOT use unescaped newlines inside any string.
-
-Return this exact structure:
-{
-  "stories": {
-    "environment": ["story 1 headline", "story 2 headline"],
-    "science": ["story 1 headline"],
-    "sports": ["story 1 headline"],
-    "overview": "awe-inspiring story headline"
-  },
-  "seg1_open": [
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."}
-  ],
-  "seg2_green": [
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."}
-  ],
-  "seg3_science": [
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."}
-  ],
-  "seg4_weather": "Cheers Alex...",
-  "seg5_sports": [
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."}
-  ],
-  "seg6_outro": [
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."},
-    {"speaker": "alice", "text": "..."},
-    {"speaker": "charlie", "text": "..."}
-  ]
-}
-
-Use today's REAL news. Make each speaker line 2-3 sentences. Warm dry Australian humour, no schlock."""
-
-SYSTEM_PROMPT = (
-    "You are the head writer for ParkSyde Bright Side, a daily good news bulletin. "
-    "You always return a single valid JSON object and nothing else. "
-    "You never include stage directions, brackets, or unescaped quotes inside string values."
-)
-
-def claude(prompt, system="", max_tokens=4000, use_search=False):
-    body = {
-        "model": MODEL,
-        "max_tokens": max_tokens,
-        "messages": [{"role": "user", "content": prompt}]
-    }
-    if system:
-        body["system"] = system
-    if use_search:
-        # Server-side web search: Anthropic runs it and returns the final text.
-        body["tools"] = [{
-            "type": WEB_SEARCH_TOOL,
-            "name": "web_search",
-            "max_uses": 5
-        }]
-
-    for attempt in range(4):
-        try:
-            resp = requests.post(
-                "https://api.anthropic.com/v1/messages",
-                headers=HEADERS, json=body, timeout=120
-            )
-
-            if resp.status_code == 429:
-                wait = 60 * (attempt + 1)
-                print("Rate limited â waiting " + str(wait) + "s")
-                time.sleep(wait)
-                continue
-
-            # For any other client error (bad model, bad tool type, bad key),
-            # retrying is pointless AND hides the cause â surface the body and stop.
-            if 400 <= resp.status_code < 500:
-                sys.exit("FATAL: Anthropic API returned " + str(resp.status_code) +
-                         ". This is a request problem (model id, tool type, or key), "
-                         "not a transient error. Response body:\n" + resp.text)
-
-            resp.raise_for_status()   # 5xx -> retry below
-            data = resp.json()
-            return "\n".join(
-                b["text"] for b in data.get("content", [])
-                if b.get("type") == "text"
-            )
-        except SystemExit:
-            raise
-        except Exception as e:
-            print("Attempt " + str(attempt + 1) + " failed: " + str(e))
-            time.sleep(30)
-    raise Exception("All retries failed (server kept returning 5xx / network errors)")
-
-def extract_json(raw):
-    raw = raw.strip()
-    if "```json" in raw:
-        raw = raw.split("```json", 1)[1].split("```", 1)[0]
-    elif "```" in raw:
-        raw = raw.split("```", 1)[1].split("```", 1)[0]
-    start = raw.find("{")
-    end = raw.rfind("}")
-    if start == -1 or end == -1:
-        raise ValueError("No JSON object found in response")
-    return raw[start:end + 1].strip()
-
-def parse_bulletin(raw):
-    candidate = extract_json(raw)
-    try:
-        return json.loads(candidate)
-    except json.JSONDecodeError as e:
-        print("First parse failed: " + str(e) + ". Attempting cleanup...")
-        cleaned = re.sub(r'\[([A-Za-z][A-Za-z\s]{1,40})\]', '', candidate)
-        return json.loads(cleaned)
-
-def generate_tts(text, speaker, filename):
-    if not ELEVENLABS_API_KEY:
-        print("  No ElevenLabs key â skipping TTS")
-        return False
-    voice_id = VOICES.get(speaker, VOICES["charlie"])
-    url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
-    headers = {
-        "xi-api-key": ELEVENLABS_API_KEY,
-        "Content-Type": "application/json"
-    }
-    clean_text = re.sub(r'\[[^\]]*\]', '', text).strip()
-    body = {
-        "text": clean_text,
-        "model_id": "eleven_turbo_v2_5",
-        "voice_settings": {"stability": 0.5, "similarity_boost": 0.75}
-    }
-    try:
-        resp = requests.post(url, headers=headers, json=body, timeout=120)
-        resp.raise_for_status()
-        with open(filename, "wb") as f:
-            f.write(resp.content)
-        print("  TTS OK: " + filename)
-        return True
-    except Exception as e:
-        print("  TTS failed for " + filename + ": " + str(e))
-        return False
-
-def generate_segment_audio(seg_id, script):
-    audio_dir = OUTPUT_DIR / "audio"
-    audio_dir.mkdir(exist_ok=True)
-    if isinstance(script, str):
-        path = audio_dir / (seg_id + ".mp3")
-        generate_tts(script, "charlie", str(path))
-    elif isinstance(script, list):
-        for i, line in enumerate(script):
-            speaker = line.get("speaker", "charlie")
-            text = line.get("text", "")
-            path = audio_dir / (seg_id + "_line" + str(i) + ".mp3")
-            generate_tts(text, speaker, str(path))
-            time.sleep(1)
-
-def main():
-    print("ParkSyde Bright Side â " + DATE_STR + " (model: " + MODEL + ")")
-    print("[1/3] Fetching news and writing scripts...")
-
-    prompt = PROMPT_TEMPLATE.replace("__DAY__", DAY_NAME)
-
-    data = None
-    last_err = None
-    for attempt in range(3):
-        news_raw = claude(prompt=prompt, system=SYSTEM_PROMPT, max_tokens=4000, use_search=True)
-        try:
-            data = parse_bulletin(news_raw)
-            break
-        except Exception as e:
-            last_err = e
-            print("Bulletin parse attempt " + str(attempt + 1) + " failed: " + str(e))
-            print("Raw head: " + news_raw[:400])
-            time.sleep(10)
-    if data is None:
-        raise Exception("Could not parse bulletin after 3 attempts: " + str(last_err))
-
-    print("[2/3] Writing script files...")
-    stories = data.get("stories", {})
-    for key in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        val = data.get(key, [])
-        (OUTPUT_DIR / (key + ".json")).write_text(json.dumps(val, indent=2))
-    seg4 = data.get("seg4_weather", "")
-    (OUTPUT_DIR / "seg4_weather.txt").write_text(seg4)
-
-    manifest = {
-        "date": DATE_STR, "day": DAY_NAME,
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "stories": stories,
-        "has_audio": bool(ELEVENLABS_API_KEY)
-    }
-    (OUTPUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2))
-    Path("output/latest.json").write_text(json.dumps(manifest, indent=2))
-
-    print("[3/3] Generating TTS audio...")
-    for seg_id in ["seg1_open","seg2_green","seg3_science","seg5_sports","seg6_outro"]:
-        script = data.get(seg_id, [])
-        generate_segment_audio(seg_id, script)
-    generate_segment_audio("seg4_weather", data.get("seg4_weather", ""))
-
-    if PARKSYDE_WEBHOOK:
-        try:
-            requests.post(PARKSYDE_WEBHOOK, json={
-                "date": DATE_STR, "day": DAY_NAME,
-                "scripts": {k: data.get(k) for k in ["seg1_open","seg2_green","seg3_science","seg4_weather","seg5_sports","seg6_outro"]},
-                "stories": stories,
-                "secret": os.environ.get("PARKSYDE_WEBHOOK_SECRET")
-            }, timeout=30)
-            print("Webhook notified")
-        except Exception as e:
-            print("Webhook ping failed: " + str(e))
-
-    print("Done! Output in " + str(OUTPUT_DIR) + "/")
-
-if __name__ == "__main__":
-    main() requests
-
-    
-    
-    
