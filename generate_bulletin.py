@@ -248,21 +248,53 @@ def generate_tts(text, speaker, filename):
 
 
 def generate_segment_audio(seg_id, script):
+    """Voice one segment. Returns its lines, each carrying the audio path that
+    was ACTUALLY written — or None where the voice failed.
+
+    Reporting what happened rather than nothing is the whole point. The
+    manifest used to record `has_audio: bool(ELEVENLABS_API_KEY)`, which is a
+    statement about a key, not about a file, and it was written before a single
+    voice had been attempted. On 1 June 2026 the key was set, every TTS call
+    failed, and that day's manifest still reads `has_audio: true` beside an
+    output folder with no audio directory in it at all. The player believed it
+    and offered a play button for a bulletin that had no voice."""
     audio_dir = OUTPUT_DIR / "audio"
     audio_dir.mkdir(exist_ok=True)
+    lines = []
+
     if isinstance(script, str):
-        path = audio_dir / (seg_id + ".mp3")
-        generate_tts(script, "charlie", str(path))
+        if not script.strip():
+            return lines
+        name = seg_id + ".mp3"
+        ok = generate_tts(script, "charlie", str(audio_dir / name))
+        lines.append({"speaker": "charlie", "text": script,
+                      "audio": (DATE_STR + "/audio/" + name) if ok else None})
     elif isinstance(script, list):
         for i, line in enumerate(script):
             speaker = line.get("speaker", "charlie")
             text = line.get("text", "")
-            path = audio_dir / (seg_id + "_line" + str(i) + ".mp3")
-            generate_tts(text, speaker, str(path))
+            name = seg_id + "_line" + str(i) + ".mp3"
+            ok = generate_tts(text, speaker, str(audio_dir / name))
+            lines.append({"speaker": speaker, "text": text,
+                          "audio": (DATE_STR + "/audio/" + name) if ok else None})
             time.sleep(1)
+
+    return lines
 
 
 SEGMENTS = ["seg1_open", "seg2_green", "seg3_science", "seg5_sports", "seg6_outro"]
+
+# Segment ids are filenames; these are what a listener sees. Order is broadcast
+# order, which is NOT the order of SEGMENTS — the weather sits fourth, between
+# science and sport, exactly as the hosts read it.
+RUNNING_ORDER = [
+    ("seg1_open",    "The Open"),
+    ("seg2_green",   "Green Desk"),
+    ("seg3_science", "Science & Tomorrow"),
+    ("seg4_weather", "Weather"),
+    ("seg5_sports",  "The Scoreboard"),
+    ("seg6_outro",   "Overview & Outro"),
+]
 
 
 def main():
@@ -294,21 +326,48 @@ def main():
             json.dumps(data.get(key, []), indent=2))
     (OUTPUT_DIR / "seg4_weather.txt").write_text(data.get("seg4_weather", ""))
 
+    print("[3/3] Generating TTS audio...")
+    # The manifest is written AFTER this, not before, so it can describe what
+    # exists rather than what was hoped for.
+    segments = []
+    for seg_id, title in RUNNING_ORDER:
+        script = data.get(seg_id, "" if seg_id == "seg4_weather" else [])
+        lines = generate_segment_audio(seg_id, script)
+        if not lines:
+            continue
+        segments.append({
+            "id": seg_id,
+            "title": title,
+            # One readable paragraph for anyone who cannot or does not want to
+            # listen — the page has to be worth opening with the sound off.
+            "script": " ".join(l["text"] for l in lines if l.get("text")).strip(),
+            "lines": lines,
+        })
+
+    voiced = sum(1 for s in segments for l in s["lines"] if l.get("audio"))
+    spoken = sum(len(s["lines"]) for s in segments)
+
     manifest = {
         "date": DATE_STR,
         "day": DAY_NAME,
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "model": MODEL,
         "stories": stories,
-        "has_audio": bool(ELEVENLABS_API_KEY)
+        "segments": segments,
+        # Counts, not intentions. `has_audio` is now true only when a file was
+        # written and the write was confirmed.
+        "lines": spoken,
+        "audio_files": voiced,
+        "has_audio": voiced > 0,
     }
     (OUTPUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2))
     Path("output/latest.json").write_text(json.dumps(manifest, indent=2))
 
-    print("[3/3] Generating TTS audio...")
-    for seg_id in SEGMENTS:
-        generate_segment_audio(seg_id, data.get(seg_id, []))
-    generate_segment_audio("seg4_weather", data.get("seg4_weather", ""))
+    if spoken and voiced < spoken:
+        # Loud, because a half-voiced bulletin is the failure that hid behind
+        # `has_audio: true` for the last three weeks it ran.
+        print("WARNING: " + str(spoken - voiced) + " of " + str(spoken) +
+              " lines have no audio. Check the ElevenLabs key and quota.")
 
     if PARKSYDE_WEBHOOK:
         try:

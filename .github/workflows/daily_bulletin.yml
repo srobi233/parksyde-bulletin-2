@@ -39,6 +39,14 @@ jobs:
         # before the run spends a single token.
         run: python -m py_compile generate_bulletin.py
 
+      - name: The generator still writes what the player reads
+        # Runs main() against a real past bulletin with both APIs stubbed, and
+        # asserts the manifest against what player.js actually loads. The two
+        # drifted apart silently once already — the player asked for a
+        # latest.mp3 that was never written and quietly showed invented
+        # stories instead. Costs a second and no tokens.
+        run: python test_pipeline.py
+
       - name: Generate bulletin
         env:
           # Unbuffered, so the script's own progress lines appear in the log in
