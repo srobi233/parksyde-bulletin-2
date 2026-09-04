@@ -251,6 +251,11 @@ def parse_bulletin(raw):
         return json.loads(cleaned)
 
 
+# Printed once per run, not eighteen times. One legible diagnosis beats a wall
+# of identical status lines — that wall is what hid the cause this afternoon.
+_TTS_BODY_SHOWN = False
+
+
 def generate_tts(text, speaker, filename):
     if not ELEVENLABS_API_KEY:
         print("  No ElevenLabs key - skipping TTS")
@@ -275,6 +280,19 @@ def generate_tts(text, speaker, filename):
     }
     try:
         resp = requests.post(url, headers=headers, json=body, timeout=120)
+        # Say WHY, once, on the first failure of a run. ElevenLabs answered 400
+        # to all eighteen lines on 4 September and the log recorded eighteen
+        # copies of "400 Client Error: Bad Request" and nothing else — the same
+        # blindfold the Anthropic 404 wore for forty-five days. A 400 is a
+        # request problem: a retired model_id, a voice id that no longer
+        # exists, a quota. All three are in the response body, and none of them
+        # are in the status line.
+        global _TTS_BODY_SHOWN
+        if resp.status_code >= 400 and not _TTS_BODY_SHOWN:
+            _TTS_BODY_SHOWN = True
+            print("  ElevenLabs " + str(resp.status_code) + " — voice " +
+                  voice_id + ", model " + body["model_id"] +
+                  ". Response body:\n  " + resp.text[:600])
         resp.raise_for_status()
         with open(filename, "wb") as f:
             f.write(resp.content)
