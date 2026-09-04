@@ -66,6 +66,19 @@ This was blamed at the time on a lapsed Emergent subscription. It was not:
 there is no Emergent dependency anywhere in this repository. The pipeline was
 already dead from its own two faults.
 
+## If a run fails
+
+The log now names the cause on its first line. The three seen so far:
+
+| Log says | Means | Fix |
+|---|---|---|
+| `401 ... API key is invalid` | The `ANTHROPIC_API_KEY` secret exists but the key behind it has been revoked or rotated. | Mint a new key at console.anthropic.com, paste it into Settings → Secrets and variables → Actions → `ANTHROPIC_API_KEY`, then Actions → Daily Bulletin → Run workflow. |
+| `404 ... for model '<id>'` | That model id no longer exists. | Update `MODEL` in `generate_bulletin.py`. See below. |
+| `400 ... tools.0.type` | `WEB_SEARCH_TOOL` and `MODEL` disagree on version. | Match them. See below. |
+
+A `429` is genuine rate limiting and retries on its own. A `5xx` retries four
+times, thirty seconds apart, which is what a retry loop is actually for.
+
 ## Changing the model
 
 One line, near the top of `generate_bulletin.py`:

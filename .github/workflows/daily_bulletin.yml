@@ -41,6 +41,9 @@ jobs:
 
       - name: Generate bulletin
         env:
+          # Unbuffered, so the script's own progress lines appear in the log in
+          # the order they happened rather than after a fatal error.
+          PYTHONUNBUFFERED: '1'
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           PARKSYDE_WEBHOOK: ${{ secrets.PARKSYDE_WEBHOOK }}
