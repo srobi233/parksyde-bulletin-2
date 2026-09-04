@@ -1,40 +1,40 @@
 {
   "date": "2026-09-04",
   "day": "Friday, September 4",
-  "generated_at": "2026-09-04T11:53:48.153967+00:00",
+  "generated_at": "2026-09-04T22:05:02.491848+00:00",
   "model": "claude-sonnet-5",
   "stories": {
     "environment": [
-      "Hervey Bay's humpback super pods steal the spring show",
-      "Reef Check volunteers report encouraging coral signs ahead of spawning season"
+      "Humpback whale numbers hit their spring peak off the Queensland coast",
+      "Rooftop solar sets a new generation record as spring sunshine kicks in"
     ],
     "science": [
-      "Aussie researchers edge closer to cheaper, more efficient solar cells"
+      "Reef scientists trial a biodegradable shield to help coral beat the heat"
     ],
     "sports": [
-      "Queensland clubs gear up for finals fever across the AFL and NRL"
+      "Queensland sides gear up as NRL and AFL finals footy begins"
     ],
-    "overview": "Humpback whales turn the Queensland coast into a spring spectacular"
+    "overview": "A total lunar eclipse will turn the moon blood red over Australia this weekend"
   },
   "segments": [
     {
       "id": "seg1_open",
       "title": "The Open",
-      "script": "G'day and welcome to ParkSyde Bright Side, it's Friday the fourth of September and mate, spring has well and truly sprung. I'm Alex Mercer, and as always I've got my partner in good news crime right beside me. That's me, Jamie, and I reckon this is my favourite time of year, Alex. The mornings are warming up, the jacarandas are thinking about it, and there is a proper cracker of a show lined up for you today. Too right. We've got whales putting on a show just off our coast, some clever Aussie scientists chasing cheaper solar power, and footy finals fever building up nicely. Stick around, Sam's got the weather too, let's get into it.",
+      "script": "G'day and welcome to ParkSyde Bright Side, I'm Alex Mercer, glad you could join us this Friday. We've got whales cruising past the coast, footy finals kicking off and a blood moon on the way this weekend, so there's plenty to get through. I'm Jamie, and honestly today's one of my favourite line ups in a while. We've got good news for the reef, good news for your power bill, and good news if you love a finals atmosphere. Grab a cuppa and settle in, because we're kicking things off with the environment, and there is a very large marine mammal situation happening just off our beaches right now.",
       "lines": [
         {
           "speaker": "charlie",
-          "text": "G'day and welcome to ParkSyde Bright Side, it's Friday the fourth of September and mate, spring has well and truly sprung. I'm Alex Mercer, and as always I've got my partner in good news crime right beside me.",
+          "text": "G'day and welcome to ParkSyde Bright Side, I'm Alex Mercer, glad you could join us this Friday. We've got whales cruising past the coast, footy finals kicking off and a blood moon on the way this weekend, so there's plenty to get through.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "That's me, Jamie, and I reckon this is my favourite time of year, Alex. The mornings are warming up, the jacarandas are thinking about it, and there is a proper cracker of a show lined up for you today.",
+          "text": "I'm Jamie, and honestly today's one of my favourite line ups in a while. We've got good news for the reef, good news for your power bill, and good news if you love a finals atmosphere.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "Too right. We've got whales putting on a show just off our coast, some clever Aussie scientists chasing cheaper solar power, and footy finals fever building up nicely. Stick around, Sam's got the weather too, let's get into it.",
+          "text": "Grab a cuppa and settle in, because we're kicking things off with the environment, and there is a very large marine mammal situation happening just off our beaches right now.",
           "audio": null
         }
       ]
@@ -42,21 +42,21 @@
     {
       "id": "seg2_green",
       "title": "Green Desk",
-      "script": "Let's kick off with something genuinely awe inspiring, Alex. Up around Hervey Bay, whale watchers are reporting massive humpback super pods as the annual migration hits its spring peak, dozens of whales at a time putting on an absolute show for anyone lucky enough to be out on the water. Love that. It's a timely reminder of why we protect these waters in the first place, these giants swim right past our doorstep every single year and somehow it never gets old. Good on the tour operators and marine rangers keeping a respectful eye on them too. Closer to the reef, volunteer divers with Reef Check have been out doing their bit as well, and the early word is the coral is looking healthy heading into spawning season. It's proof that when everyday Queenslanders roll up their sleeves for citizen science, our reef gets a fighting chance.",
+      "script": "So Alex, it is peak humpback whale season along the Queensland coast, which means spots like the Gold Coast and Hervey Bay are absolutely buzzing with sightings. Mums and calves are making their way south and whale watchers are reporting bumper numbers this year. Love that, it's basically our own version of a spring migration parade, minus the marching band. Meanwhile on the power front, all that spring sunshine has pushed rooftop solar generation to a fresh record, which is good news for anyone who likes watching their electricity meter run backwards. It really is a nice little one two punch, wildlife thriving and households saving. Two very different kinds of solar powered energy if you think about it, one's got a blowhole and the other's on your roof.",
       "lines": [
         {
           "speaker": "alice",
-          "text": "Let's kick off with something genuinely awe inspiring, Alex. Up around Hervey Bay, whale watchers are reporting massive humpback super pods as the annual migration hits its spring peak, dozens of whales at a time putting on an absolute show for anyone lucky enough to be out on the water.",
+          "text": "So Alex, it is peak humpback whale season along the Queensland coast, which means spots like the Gold Coast and Hervey Bay are absolutely buzzing with sightings. Mums and calves are making their way south and whale watchers are reporting bumper numbers this year.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "Love that. It's a timely reminder of why we protect these waters in the first place, these giants swim right past our doorstep every single year and somehow it never gets old. Good on the tour operators and marine rangers keeping a respectful eye on them too.",
+          "text": "Love that, it's basically our own version of a spring migration parade, minus the marching band. Meanwhile on the power front, all that spring sunshine has pushed rooftop solar generation to a fresh record, which is good news for anyone who likes watching their electricity meter run backwards.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "Closer to the reef, volunteer divers with Reef Check have been out doing their bit as well, and the early word is the coral is looking healthy heading into spawning season. It's proof that when everyday Queenslanders roll up their sleeves for citizen science, our reef gets a fighting chance.",
+          "text": "It really is a nice little one two punch, wildlife thriving and households saving. Two very different kinds of solar powered energy if you think about it, one's got a blowhole and the other's on your roof.",
           "audio": null
         }
       ]
@@ -64,21 +64,21 @@
     {
       "id": "seg3_science",
       "title": "Science & Tomorrow",
-      "script": "Right, science time, and this one could hit you right in the hip pocket, Jamie. Aussie researchers are chipping away at next generation solar cell technology, aiming to make panels cheaper to produce without losing any efficiency. Which matters a lot for a sunburnt country like ours, Alex, cheaper solar means more households and businesses can actually afford to make the switch. It's slow, patient lab work, but that is exactly how the big breakthroughs happen. Exactly, no overnight miracles, just smart people grinding away in Aussie universities and labs. We will keep you posted as that research moves along, because good ideas like that deserve some sunshine of their own.",
+      "script": "Right, science time, and this one's close to home for us Queenslanders. Reef researchers have been trialling a biodegradable film, a bit like a sunscreen for coral, that helps shield reefs from heat stress during marine heatwaves. So basically we're giving the Great Barrier Reef its own version of sunnies and a hat. Early trials are promising, and it's a nice reminder that some of the smartest climate solutions are coming right out of our own backyard labs. Exactly, it's not a silver bullet but every bit of breathing room helps while the bigger emissions work happens. Small science, potentially big difference for something as massive as the reef.",
       "lines": [
         {
           "speaker": "charlie",
-          "text": "Right, science time, and this one could hit you right in the hip pocket, Jamie. Aussie researchers are chipping away at next generation solar cell technology, aiming to make panels cheaper to produce without losing any efficiency.",
+          "text": "Right, science time, and this one's close to home for us Queenslanders. Reef researchers have been trialling a biodegradable film, a bit like a sunscreen for coral, that helps shield reefs from heat stress during marine heatwaves.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "Which matters a lot for a sunburnt country like ours, Alex, cheaper solar means more households and businesses can actually afford to make the switch. It's slow, patient lab work, but that is exactly how the big breakthroughs happen.",
+          "text": "So basically we're giving the Great Barrier Reef its own version of sunnies and a hat. Early trials are promising, and it's a nice reminder that some of the smartest climate solutions are coming right out of our own backyard labs.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "Exactly, no overnight miracles, just smart people grinding away in Aussie universities and labs. We will keep you posted as that research moves along, because good ideas like that deserve some sunshine of their own.",
+          "text": "Exactly, it's not a silver bullet but every bit of breathing room helps while the bigger emissions work happens. Small science, potentially big difference for something as massive as the reef.",
           "audio": null
         }
       ]
@@ -86,11 +86,11 @@
     {
       "id": "seg4_weather",
       "title": "Weather",
-      "script": "Cheers Alex, and g'day everyone, Sam here with your southeast Queensland outlook. It is shaping up as a classic spring day out there, mostly sunny skies across Brisbane, the Gold Coast and the Sunshine Coast, with the city topping out around the mid twenties and the beaches sitting a touch cooler thanks to a gentle sea breeze. Inland toward the Lockyer Valley and the Downs expect it a little warmer and drier, so if you are out and about this weekend it is a ripper time to get outdoors, just keep the sunscreen handy because that UV is climbing fast this time of year. Back to you two.",
+      "script": "Cheers Alex, and look, it is shaping up as a properly lovely spring stretch for the south east. We'll see plenty of blue sky through the weekend with daytime temps sitting in that comfortable low to mid twenties, so perfect jumper in the morning, tee shirt by lunch kind of weather. Brisbane and the Gold Coast can expect light winds and mostly dry conditions, though the Sunshine Coast hinterland might catch the odd stray shower overnight. And keep an eye on the sky Saturday night, because clear conditions mean south east Queenslanders should get a ripper view of that total lunar eclipse turning the moon a deep red. Back to you two.",
       "lines": [
         {
           "speaker": "charlie",
-          "text": "Cheers Alex, and g'day everyone, Sam here with your southeast Queensland outlook. It is shaping up as a classic spring day out there, mostly sunny skies across Brisbane, the Gold Coast and the Sunshine Coast, with the city topping out around the mid twenties and the beaches sitting a touch cooler thanks to a gentle sea breeze. Inland toward the Lockyer Valley and the Downs expect it a little warmer and drier, so if you are out and about this weekend it is a ripper time to get outdoors, just keep the sunscreen handy because that UV is climbing fast this time of year. Back to you two.",
+          "text": "Cheers Alex, and look, it is shaping up as a properly lovely spring stretch for the south east. We'll see plenty of blue sky through the weekend with daytime temps sitting in that comfortable low to mid twenties, so perfect jumper in the morning, tee shirt by lunch kind of weather. Brisbane and the Gold Coast can expect light winds and mostly dry conditions, though the Sunshine Coast hinterland might catch the odd stray shower overnight. And keep an eye on the sky Saturday night, because clear conditions mean south east Queenslanders should get a ripper view of that total lunar eclipse turning the moon a deep red. Back to you two.",
           "audio": null
         }
       ]
@@ -98,21 +98,21 @@
     {
       "id": "seg5_sports",
       "title": "The Scoreboard",
-      "script": "Cheers Sam. Now footy fans, buckle up, because finals season is well underway and Queensland has got skin in the game on both codes. The Brisbane Lions are flying in the AFL race, and up north our NRL sides are scrapping hard to keep their finals dreams alive. It's that time of year where the whole state gets a bit footy mad, isn't it, Alex. Pubs are packed, backyard barbecues are turning into unofficial grand final parties, and there is nothing quite like Queensland pride when our teams are in the mix. Nothing like it. Whatever code you follow, whatever colours you wear, it is shaping up as a ripper finals series, and we will be cheering just as loud from the ParkSyde couch as anyone in the stands.",
+      "script": "Thanks Sam, and yeah, finals footy is exactly the kind of thing you want clear skies for. NRL finals are underway and AFL isn't far behind, with Queensland sides carrying plenty of hope into September. There's a real buzz around the state, pubs are already arguing about tipping and backyard barbecues are basically finals HQ for the next few weeks. Whatever happens, it's shaping up as a cracking finals series to watch. Nothing like September footy to bring people together, win lose or draw. Good luck to all our Queensland teams, we'll be cheering loud from the couch.",
       "lines": [
         {
           "speaker": "charlie",
-          "text": "Cheers Sam. Now footy fans, buckle up, because finals season is well underway and Queensland has got skin in the game on both codes. The Brisbane Lions are flying in the AFL race, and up north our NRL sides are scrapping hard to keep their finals dreams alive.",
+          "text": "Thanks Sam, and yeah, finals footy is exactly the kind of thing you want clear skies for. NRL finals are underway and AFL isn't far behind, with Queensland sides carrying plenty of hope into September.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "It's that time of year where the whole state gets a bit footy mad, isn't it, Alex. Pubs are packed, backyard barbecues are turning into unofficial grand final parties, and there is nothing quite like Queensland pride when our teams are in the mix.",
+          "text": "There's a real buzz around the state, pubs are already arguing about tipping and backyard barbecues are basically finals HQ for the next few weeks. Whatever happens, it's shaping up as a cracking finals series to watch.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "Nothing like it. Whatever code you follow, whatever colours you wear, it is shaping up as a ripper finals series, and we will be cheering just as loud from the ParkSyde couch as anyone in the stands.",
+          "text": "Nothing like September footy to bring people together, win lose or draw. Good luck to all our Queensland teams, we'll be cheering loud from the couch.",
           "audio": null
         }
       ]
@@ -120,31 +120,31 @@
     {
       "id": "seg6_outro",
       "title": "Overview & Outro",
-      "script": "And that brings us to the end of today's Bright Side, what a beauty of a Friday lineup that was. Whales putting on a show, our reef looking healthy, solar science on the move and footy finals heating up, honestly you cannot script a better good news day. You really can't, Alex. It's a nice reminder that even on a normal old Friday there is plenty going right in this state, from the coastline right through to the lab bench and the footy field. Big thanks to Sam for keeping us dry and sun smart, and to all of you for tuning in and starting your weekend with us. Get out and enjoy that spring sunshine, it is calling your name. Have a ripper weekend, everyone, look after each other, and we will catch you right back here on Monday for another dose of the Bright Side. See ya then, take care Queensland.",
+      "script": "So that's your Bright Side wrap for Friday, whales putting on a show, the reef getting a bit of help from science, and finals footy heating up right alongside spring sunshine. And don't forget to look up this weekend for that blood moon, it's the kind of free entertainment the universe doesn't offer very often. Genuinely one to step outside for. Big thanks to Jamie and to Sam for the weather, and to all of you for spending part of your day with us. It means a lot, truly. We'll be back same time next week with more good news from around Queensland and beyond. Until then, take care of each other. Get outside, look up at that moon, and we'll catch you on the next Bright Side. See ya.",
       "lines": [
         {
           "speaker": "charlie",
-          "text": "And that brings us to the end of today's Bright Side, what a beauty of a Friday lineup that was. Whales putting on a show, our reef looking healthy, solar science on the move and footy finals heating up, honestly you cannot script a better good news day.",
+          "text": "So that's your Bright Side wrap for Friday, whales putting on a show, the reef getting a bit of help from science, and finals footy heating up right alongside spring sunshine.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "You really can't, Alex. It's a nice reminder that even on a normal old Friday there is plenty going right in this state, from the coastline right through to the lab bench and the footy field.",
+          "text": "And don't forget to look up this weekend for that blood moon, it's the kind of free entertainment the universe doesn't offer very often. Genuinely one to step outside for.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "Big thanks to Sam for keeping us dry and sun smart, and to all of you for tuning in and starting your weekend with us. Get out and enjoy that spring sunshine, it is calling your name.",
+          "text": "Big thanks to Jamie and to Sam for the weather, and to all of you for spending part of your day with us. It means a lot, truly.",
           "audio": null
         },
         {
           "speaker": "alice",
-          "text": "Have a ripper weekend, everyone, look after each other, and we will catch you right back here on Monday for another dose of the Bright Side.",
+          "text": "We'll be back same time next week with more good news from around Queensland and beyond. Until then, take care of each other.",
           "audio": null
         },
         {
           "speaker": "charlie",
-          "text": "See ya then, take care Queensland.",
+          "text": "Get outside, look up at that moon, and we'll catch you on the next Bright Side. See ya.",
           "audio": null
         }
       ]
