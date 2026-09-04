@@ -50,5 +50,29 @@ jobs:
               sys.exit(str(len(bad)) + ' workflow file(s) will not run.')
           PY
 
+      - name: No workflow file is hiding where GitHub cannot see it
+        # This repository carried
+        #   .github/workflows/.github/workflows/.github/workflows/daily_bulletin.yml
+        # for months: a complete, plausible, slightly older copy of the daily
+        # bulletin job, three levels deep. Someone typed the full path into the
+        # web UI's filename box instead of just the name, and GitHub happily
+        # made the directories. It could never run — GitHub reads only the top
+        # level of .github/workflows — but it was worse than useless: edit that
+        # one and nothing happens, with nothing to tell you why. `ls` does not
+        # show it either, because the directory starts with a dot.
+        run: |
+          python - <<'PY'
+          import sys, pathlib
+          root = pathlib.Path('.github/workflows')
+          strays = [p for p in root.rglob('*.y*ml') if p.parent != root]
+          for p in strays:
+              print('BURIED ' + str(p))
+          if strays:
+              sys.exit('A workflow file is nested below .github/workflows/. '
+                       'GitHub reads only the top level, so it will never run — '
+                       'move it up or delete it.')
+          print('OK  no workflow file is nested')
+          PY
+
       - name: Every Python file compiles
         run: python -m compileall -q .
