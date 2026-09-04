@@ -205,6 +205,40 @@ def extract_json(raw):
     return raw[start:end + 1].strip()
 
 
+def clean_spoken(text):
+    """Strip anything that is markup rather than words.
+
+    The web-search tool returns citations as <cite index='28-2,28-3'>…</cite>
+    and the model writes them straight into the spoken lines. 185 of them
+    survive in 20 of the 45 bulletins already published. Nothing removed them:
+    the TTS cleaner strips [stage directions] in square brackets and nothing
+    else, so ElevenLabs was handed the literal string "<cite index='28-2,28-3'>
+    Extended highlights are up from the Eagles and Bombers clash" and read the
+    markup out along with the sentence. On the page it showed as raw tags.
+
+    A listener would have heard it every second morning. Nobody was listening,
+    which is the only reason it lasted."""
+    if not text:
+        return ""
+    text = re.sub(r'<[^>]*>', '', text)          # cite tags and any other markup
+    text = re.sub(r'\[[^\]]*\]', '', text)       # [Australian accent], [pause]
+    text = re.sub(r'\s+', ' ', text)             # the gaps those left behind
+    return text.strip()
+
+
+def clean_bulletin(data):
+    """Run every spoken line through clean_spoken, in place."""
+    for key in list(data.keys()):
+        val = data[key]
+        if isinstance(val, str) and key.startswith("seg"):
+            data[key] = clean_spoken(val)
+        elif isinstance(val, list):
+            for line in val:
+                if isinstance(line, dict) and "text" in line:
+                    line["text"] = clean_spoken(line["text"])
+    return data
+
+
 def parse_bulletin(raw):
     candidate = extract_json(raw)
     try:
@@ -227,7 +261,13 @@ def generate_tts(text, speaker, filename):
         "xi-api-key": ELEVENLABS_API_KEY,
         "Content-Type": "application/json"
     }
-    clean_text = re.sub(r'\[[^\]]*\]', '', text).strip()
+    # Belt and braces. clean_bulletin() has already been over every line, but
+    # this is the last point before words become a voice, and a stray tag here
+    # is not a rendering blemish — it is something a person hears.
+    clean_text = clean_spoken(text)
+    if not clean_text:
+        print("  Nothing to say for " + filename + " — skipping")
+        return False
     body = {
         "text": clean_text,
         "model_id": "eleven_turbo_v2_5",
@@ -309,7 +349,7 @@ def main():
         news_raw = claude(prompt=prompt, system=SYSTEM_PROMPT,
                           max_tokens=4000, use_search=True)
         try:
-            data = parse_bulletin(news_raw)
+            data = clean_bulletin(parse_bulletin(news_raw))
             break
         except Exception as e:
             last_err = e

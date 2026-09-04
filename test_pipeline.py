@@ -139,6 +139,41 @@ check("player.js reads the per-line playlist, not a latest.mp3 that never existe
 check("the comment-stripping above did not simply empty the file",
       "function load()" in player and len(player) > 2000)
 
+# --- nothing that is markup may reach a voice --------------------------------
+# 185 <cite index='…'> tags survive in 20 of the 45 published bulletins, and
+# they were sent to ElevenLabs verbatim: the listener heard the markup read out
+# with the sentence. The fixture below is a real line off the 1 June bulletin.
+print("\n\033[1mSpoken text — markup never reaches a voice\033[0m")
+sys.path.insert(0, str(HERE))
+import generate_bulletin as gb
+
+REAL = "<cite index='28-2,28-3'>Extended highlights are up from the Eagles and Bombers clash</cite>"
+check("a citation tag is stripped, the sentence survives",
+      gb.clean_spoken(REAL) == "Extended highlights are up from the Eagles and Bombers clash",
+      "got: " + repr(gb.clean_spoken(REAL)))
+check("stage directions still go too",
+      gb.clean_spoken("[Australian accent] Good morning. [pause]") == "Good morning.")
+check("the gaps left behind are closed up",
+      "  " not in gb.clean_spoken("Good <cite index='1'>news</cite> today"))
+check("ordinary punctuation is left alone",
+      gb.clean_spoken("It's 26°C — towels off the line by lunchtime.")
+      == "It's 26°C — towels off the line by lunchtime.")
+check("an empty or missing line does not crash the cleaner",
+      gb.clean_spoken("") == "" and gb.clean_spoken(None) == "")
+
+# and that it is actually wired in, not merely defined
+dirty = {"seg1_open": [{"speaker": "charlie", "text": REAL}],
+         "seg4_weather": "<cite index='9-1'>Sunny in Brisbane.</cite>"}
+cleaned = gb.clean_bulletin(dirty)
+check("clean_bulletin reaches lines inside segments",
+      cleaned["seg1_open"][0]["text"] ==
+      "Extended highlights are up from the Eagles and Bombers clash")
+check("clean_bulletin reaches the weather, which is a bare string",
+      cleaned["seg4_weather"] == "Sunny in Brisbane.")
+gen = re.sub(r"#.*", "", (HERE / "generate_bulletin.py").read_text())
+check("the cleaner is called on the parse path, not just defined",
+      "clean_bulletin(parse_bulletin(" in gen)
+
 print("\n" + "-" * 52)
 if fail:
     print("\033[31m" + str(fail) + " failed\033[0m, " + str(ok) + " passed")
